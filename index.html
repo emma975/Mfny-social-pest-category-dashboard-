@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MFNY Social PEST - Category Sales Mix, Demographics & Behavioral Trends</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+:root{--bg:#0b1120;--card:#0f1729;--border:#1a2744;--text:#e8edf5;--muted:#7b8ba5;--accent:#22d3a7;--rose:#f43f7a;--amber:#f5a623;--blue:#3b82f6;--violet:#8b5cf6;--cyan:#06b6d4;--emerald:#10b981;--teal:#14b8a6;--orange:#f97316;--pink:#ec4899;--grid:#162035}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:20px 14px;max-width:960px;margin:0 auto}
+.mono{font-family:'Courier New',monospace}
+.header-tag{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:5px}
+h1{font-size:24px;font-weight:800;line-height:1.15}
+h1 span{background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub-header{font-size:10px;color:var(--muted);margin-top:5px}
+.tabs{display:flex;gap:3px;margin-bottom:18px;overflow-x:auto;background:rgba(15,23,41,0.6);border-radius:8px;padding:3px;border:1px solid var(--border)}
+.tab-btn{padding:7px 13px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Courier New',monospace;background:transparent;color:var(--muted);transition:all 0.15s}
+.tab-btn.active{background:var(--accent);color:var(--bg)}
+.tab-content{display:none}.tab-content.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:18px}
+.card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
+.card-sub{font-size:10px;color:var(--muted);margin-bottom:14px;font-family:'Courier New',monospace;line-height:1.5}
+.note-box{margin-top:14px;padding:10px 14px;background:rgba(34,211,167,0.05);border-radius:8px;border:1px solid rgba(34,211,167,0.12);font-size:10px;color:var(--muted);line-height:1.6;font-family:'Courier New',monospace}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{background:linear-gradient(135deg,var(--card) 0%,rgba(34,211,167,0.03) 100%);border:1px solid var(--border);border-radius:10px;padding:14px 16px;flex:1;min-width:140}
+.stat-label{font-size:9.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:5px;font-family:'Courier New',monospace}
+.stat-val{font-size:22px;font-weight:800;color:var(--text);line-height:1.1}
+.stat-sub{font-size:9.5px;margin-top:3px;font-family:'Courier New',monospace}
+.chart-wrap{position:relative;width:100%;margin-bottom:8px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:9.5px;font-family:'Courier New',monospace;color:var(--muted)}
+.legend-swatch{width:12px;height:3px;border-radius:1px;display:inline-block}
+.micro-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;background:rgba(15,23,41,0.6);border-radius:8px;padding:3px;border:1px solid var(--border)}
+.micro-btn{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Courier New',monospace;background:transparent;color:var(--muted);transition:all 0.15s}
+.micro-btn.active{background:var(--accent);color:var(--bg)}
+.pie-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.pie-legend{flex:1;min-width:200px}
+.pie-legend-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:10px;font-family:'Courier New',monospace}
+.pie-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.footer{margin-top:20px;padding:14px 0;border-top:1px solid var(--border);font-size:8px;color:var(--muted);font-family:'Courier New',monospace;line-height:1.7}
+canvas{max-width:100%}
+</style>
+</head>
+<body>
+<div class="mono header-tag">MFNY Strategy - PEST Analysis - Social (S)</div>
+<h1>The Customer &amp; The Consumer:<br><span>Category Sales Mix, Demographics &amp; Behavioral Trends</span></h1>
+<div class="mono sub-header">NYS Legal Cannabis Market - Actual 2023-2026 - Projected 2026-2028 - Hover any data point for source citation</div>
+
+<div class="tabs" style="margin-top:18px">
+<button class="tab-btn active" onclick="switchTab('macro')">Macro Category Mix</button>
+<button class="tab-btn" onclick="switchTab('micro')">Sub-Category Deep Dive</button>
+<button class="tab-btn" onclick="switchTab('demo')">Demographics</button>
+<button class="tab-btn" onclick="switchTab('gen')">Generational Preferences</button>
+<button class="tab-btn" onclick="switchTab('mode')">Consumption Modes</button>
+<button class="tab-btn" onclick="switchTab('effects')">Product Effects</button>
+</div>
+
+<!-- ═══ TAB: MACRO ═══ -->
+<div id="tab-macro" class="tab-content active">
+<div class="stats">
+<div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">Non-Flower Share</div><div class="stat-val">55%</div><div class="stat-sub" style="color:var(--rose)">As of Nov 2024 (OCM)</div></div>
+<div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">Pre-Roll Surge</div><div class="stat-val">19%</div><div class="stat-sub" style="color:var(--rose)">Feb '26; was 12% mid-'24</div></div>
+<div class="stat" style="border-top:2px solid var(--accent)"><div class="stat-label">Beverage YoY</div><div class="stat-val">+88%</div><div class="stat-sub" style="color:var(--accent)">Fastest-growing category</div></div>
+<div class="stat" style="border-top:2px solid var(--blue)"><div class="stat-label">500+ Brands</div><div class="stat-val">513</div><div class="stat-sub" style="color:var(--blue)">Across 8 major categories</div></div>
+</div>
+<div class="card"><div class="card-title">Revenue Share by Category (Gross Retail $) - Demographic-Weighted Model</div><div class="card-sub">% of total gross retail revenue (shelf price at POS). Actual Dec 2023-Feb 2026 (OCM/Headset). Projected 2027P-2028P via demographic-weighted model. Hover for sources.</div><div class="chart-wrap"><canvas id="macroRevChart" height="380"></canvas></div></div>
+<div class="card"><div class="card-title">Unit Share by Category Using Revenue-to-Unit Conversion</div><div class="card-sub">% of total units sold. Derived from revenue share / avg price per unit per category. Low-price categories gain share vs revenue view. Hover for sources.</div><div class="chart-wrap"><canvas id="macroUnitChart" height="380"></canvas></div></div>
+<div class="card"><div class="note-box">The gap between revenue and unit share reveals which categories punch above or below their weight. Vaporizers command ~25% of revenue but only ~13% of units because avg price ($52-$65) is the highest of any mainstream format. Edibles are the inverse: ~14.5% of revenue but ~21% of units because gummies ($20-$27) and cans ($5) have the lowest per-transaction cost. Pre-rolls are roughly proportional across both measures. Sources: OCM 2023 Annual Report; OCM 2024 Market Report; Headset; OCM 2025 Annual Report; Cannabis Benchmarks</div></div>
+<div class="card"><div class="card-title">Model Input: Generational Share of Total Market Spend</div><div class="card-sub">Each generation's % of total cannabis spend. Gen Z grows from ~15% (2023) to 33% (2028P). Hover for sources.</div><div class="chart-wrap"><canvas id="genWeightChart" height="320"></canvas></div></div>
+<div class="card"><div class="card-title">Model Input: Annual Intra-Cohort Preference Drift (pp/yr)</div><div class="card-sub">How each generation's category preferences shift independent of demographic weight. Derived from BRFSS 2018-2023, Headset YoY, BDSA CAGRs.</div>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;font-family:monospace"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px 10px;color:var(--text)">Category</th><th style="text-align:center;padding:8px 10px;color:var(--violet)">Gen Z</th><th style="text-align:center;padding:8px 10px;color:var(--blue)">Millennial</th><th style="text-align:center;padding:8px 10px;color:var(--amber)">Gen X</th><th style="text-align:center;padding:8px 10px;color:var(--emerald)">Boomer</th><th style="text-align:left;padding:8px 10px;color:var(--muted);font-size:9px">Rationale</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Flower</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-2.0</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-1.5</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-1.0</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-1.0</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Secular decline; fastest among Gen Z (Headset CA trend)</td></tr>
+<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Vaporizer</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-0.5</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-0.5</td><td style="text-align:center;padding:6px 10px;color:var(--muted)">0.0</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Growing only for Gen Z; Boomer vape sales -9% YoY (CBT)</td></tr>
+<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Pre-Roll</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+1.0</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+1.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+1.0</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Fastest-growing; Millennials = 45% of $3B market (Flowhub); BDSA 10% CAGR</td></tr>
+<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Edibles</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Steady all cohorts; BRFSS eating doubled 7% to 12.3% (2018-22)</td></tr>
+</tbody></table></div></div>
+</div>
+
+<!-- ═══ TAB: MICRO ═══ -->
+<div id="tab-micro" class="tab-content">
+<div class="micro-tabs">
+<button class="micro-btn active" onclick="switchMicro('preroll')">Pre-Rolls</button>
+<button class="micro-btn" onclick="switchMicro('edible')">Edibles</button>
+<button class="micro-btn" onclick="switchMicro('vape')">Vaporizers</button>
+<button class="micro-btn" onclick="switchMicro('conc')">Concentrates</button>
+<button class="micro-btn" onclick="switchMicro('flower')">Flower</button>
+</div>
+<div id="micro-preroll" class="micro-panel" style="display:block">
+<div class="card"><div class="card-title">Pre-Roll Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of pre-roll category revenue. Actual 2023-2024 (OCM). Projected 2025E-2028P. Hover for sources.</div><div class="chart-wrap"><canvas id="prerollLineChart" height="340"></canvas></div></div>
+<div class="card"><div class="card-title">Current Snapshot: Pre-Roll Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 17-21. Hover for avg price &amp; source.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="prerollPie" width="220" height="220"></canvas></div><div class="pie-legend" id="prerollPieLegend"></div></div></div>
+</div>
+<div id="micro-edible" class="micro-panel" style="display:none">
+<div class="card"><div class="card-title">Edibles Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of edibles category revenue. Gummies eroding share to beverages. Hover for sources.</div><div class="chart-wrap"><canvas id="edibleLineChart" height="340"></canvas></div></div>
+<div class="card"><div class="card-title">Current Snapshot: Edibles Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 22-24. Hover for avg price &amp; source.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="ediblePie" width="220" height="220"></canvas></div><div class="pie-legend" id="ediblePieLegend"></div></div></div>
+</div>
+<div id="micro-vape" class="micro-panel" style="display:none">
+<div class="card"><div class="card-title">Vaporizer Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of vape sales by format/size. Disposable overlaps size categories. Hover for sources.</div><div class="chart-wrap"><canvas id="vapeLineChart" height="340"></canvas></div></div>
+<div class="card"><div class="card-title">Current Snapshot: Vaporizer Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 25-27.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="vapePie" width="220" height="220"></canvas></div><div class="pie-legend" id="vapePieLegend"></div></div></div>
+</div>
+<div id="micro-conc" class="micro-panel" style="display:none">
+<div class="card"><div class="card-title">Concentrate Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of concentrate category revenue. Infused products = 76%+ of category. Hover for sources.</div><div class="chart-wrap"><canvas id="concLineChart" height="340"></canvas></div></div>
+<div class="card"><div class="card-title">Current Snapshot: Concentrate Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 19-20. Hover for avg price &amp; source.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="concPie" width="220" height="220"></canvas></div><div class="pie-legend" id="concPieLegend"></div></div></div>
+</div>
+<div id="micro-flower" class="micro-panel" style="display:none">
+<div class="card"><div class="card-title">Flower Package Size Evolution (2023-2028P)</div><div class="card-sub">% of flower sales by weight. 3.5g eroding as ounce value-packs grow. Hover for sources.</div><div class="chart-wrap"><canvas id="flowerLineChart" height="340"></canvas></div></div>
+<div class="card"><div class="card-title">Current Snapshot: Flower Package Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Fig 14 &amp; Table 2.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="flowerPie" width="220" height="220"></canvas></div><div class="pie-legend" id="flowerPieLegend"></div></div></div>
+</div>
+</div>
+
+<!-- ═══ TAB: DEMOGRAPHICS ═══ -->
+<div id="tab-demo" class="tab-content">
+<div class="stats">
+<div class="stat" style="border-top:2px solid var(--blue)"><div class="stat-label">NYS Adult Prevalence</div><div class="stat-val">14.7%</div><div class="stat-sub" style="color:var(--blue)">2023 BRFSS (past 30 days)</div></div>
+<div class="stat" style="border-top:2px solid var(--violet)"><div class="stat-label">Daily/Near Daily</div><div class="stat-val">6.7%</div><div class="stat-sub" style="color:var(--violet)">20+ days/month, 2023</div></div>
+<div class="stat" style="border-top:2px solid var(--accent)"><div class="stat-label">Est. Monthly Users</div><div class="stat-val">~2.2M</div><div class="stat-sub" style="color:var(--accent)">NYS adults 21+ (ACS 2022)</div></div>
+<div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">2028P Prevalence</div><div class="stat-val">~19%</div><div class="stat-sub" style="color:var(--rose)">Approaching CO/WA levels</div></div>
+</div>
+<div class="card"><div class="card-title">Cannabis Prevalence by Age Cohort (NYS, 2018-2028P)</div><div class="card-sub">Past-month consumption % by age group. BRFSS 2018-2023 actual. 2025E-2028P projected. Hover for source.</div><div class="chart-wrap"><canvas id="ageChart" height="380"></canvas></div></div>
+<div class="card"><div class="card-title">Prevalence by Sex &amp; Sexual Orientation/Gender Identity (NYS, 2018-2028P)</div><div class="card-sub">BRFSS 2018-2023 actual. 2025E-2028P projected. MRTA Report; OCM 2025 Annual Report, Table 29.</div><div class="chart-wrap"><canvas id="demoChart" height="320"></canvas></div></div>
+<div class="card"><div class="card-title">Prevalence by Race/Ethnicity (NYS, 2018-2028P)</div><div class="card-sub">BRFSS data via MRTA Report &amp; OCM 2025 Annual Report. Race-specific longitudinal data limited pre-2022.</div><div class="chart-wrap"><canvas id="raceChart" height="320"></canvas></div></div>
+<div class="card"><div class="card-title">Statewide Prevalence &amp; Daily Use Trend (NYS, 2018-2028P)</div><div class="card-sub">Current consumption (any past 30 days) vs daily/near-daily (20+ days/month). BRFSS 2018-2023 actual.</div><div class="chart-wrap"><canvas id="prevChart" height="280"></canvas></div></div>
+</div>
+
+<!-- ═══ TAB: GENERATIONAL ═══ -->
+<div id="tab-gen" class="tab-content">
+<div class="card"><div class="card-title">Category Spending by Generation (U.S., 2024-2025)</div><div class="card-sub">% of each generation's cannabis spending by category. Headset POS data via Flowhub, GreenState, Cannabis Business Times (2025-2026).</div><div class="chart-wrap"><canvas id="genSpendChart" height="340"></canvas></div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px">
+<div class="card" style="border-top:2px solid var(--violet);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--violet);margin-bottom:8px">Gen Z (1997-2012)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--violet)">&#8250;</span> 38% spend on vapor pens - #1 category<br><span style="color:var(--violet)">&#8250;</span> 32.5% on flower - lowest of any gen<br><span style="color:var(--violet)">&#8250;</span> Fastest-growing cohort (+20% YoY)<br><span style="color:var(--violet)">&#8250;</span> 69% prefer cannabis to alcohol<br><span style="color:var(--violet)">&#8250;</span> 38% say today's cannabis is 'too strong'</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Headset via GreenState/Flowhub 2026; CBS News; New Frontier Data</div></div>
+<div class="card" style="border-top:2px solid var(--blue);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">Millennial (1981-1996)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--blue)">&#8250;</span> 40.1% spend on flower - still dominant<br><span style="color:var(--blue)">&#8250;</span> Top spenders: 45% of $3B pre-roll market<br><span style="color:var(--blue)">&#8250;</span> Peak earning years = highest total spend<br><span style="color:var(--blue)">&#8250;</span> Seek control, consistency, value<br><span style="color:var(--blue)">&#8250;</span> Wellness-oriented: anxiety, sleep, recovery</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Headset via Flowhub 2025; Hybrid Marketing 2025</div></div>
+<div class="card" style="border-top:2px solid var(--amber);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:8px">Gen X (1965-1980)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--amber)">&#8250;</span> 44% on flower - traditional preference<br><span style="color:var(--amber)">&#8250;</span> 89% consume weekly or more (highest freq)<br><span style="color:var(--amber)">&#8250;</span> Conservative approach from War on Drugs era<br><span style="color:var(--amber)">&#8250;</span> Prefer familiar formats over novelty<br><span style="color:var(--amber)">&#8250;</span> Growing adoption of edibles/topicals</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Sanctuary Wellness/Crescent Canna survey 2024</div></div>
+<div class="card" style="border-top:2px solid var(--emerald);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--emerald);margin-bottom:8px">Baby Boomer (1946-1964)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--emerald)">&#8250;</span> 50% spend on flower - highest flower share<br><span style="color:var(--emerald)">&#8250;</span> 14.4% on vapes - lowest vape share<br><span style="color:var(--emerald)">&#8250;</span> 65+ use surged 46% from 2021-2023<br><span style="color:var(--emerald)">&#8250;</span> Visit less often but spend more per visit<br><span style="color:var(--emerald)">&#8250;</span> Medical-oriented (17% edibles share)</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Headset via CBT 2026; NYU CDUHR; Flowhub</div></div>
+</div>
+</div>
+
+<!-- ═══ TAB: CONSUMPTION MODES ═══ -->
+<div id="tab-mode" class="tab-content">
+<div class="card"><div class="card-title">Usual Mode of Consumption Evolution (NYS)</div><div class="card-sub">BRFSS 2018-2022 actual. 2024E-2028P projected. MRTA Implementation Report, Fig 21; OCM 2025 Annual Report.</div><div class="chart-wrap"><canvas id="modeChart" height="340"></canvas></div></div>
+<div class="card"><div class="card-title">Consumption Reason: Medical vs Non-Medical (NYS)</div><div class="card-sub">BRFSS 2018-2022. MRTA Implementation Report, Fig 20.</div><div class="chart-wrap"><canvas id="reasonChart" height="260"></canvas></div></div>
+<div class="card"><div class="note-box">Smoking declined from 76.4% to 69.8% (2018-2022) and is projected to fall to ~55% by 2028 as edibles double from 7% to 22%. Post-legalization (2022): medical-only use dropped to 13.5% (from 19.2% peak in 2020) while non-medical-only rebounded to 52.1%. Multimodal consumption surged - 39% of users reported 2+ modes in 2022, up from 27% in 2021. (MRTA Implementation Report; OCM 2025 Annual Report)</div></div>
+</div>
+
+<!-- ═══ TAB: EFFECTS ═══ -->
+<div id="tab-effects" class="tab-content">
+<div class="card"><div class="card-title">Edible Effect Positioning - Radar Profile (NYS)</div><div class="card-sub">48% of edibles sold carry effect labels. OCM 2024 Market Report, Fig 33. Grouped thematically. Hover for sub-effects.</div><div class="chart-wrap" style="display:flex;justify-content:center"><canvas id="radarChart" width="420" height="420"></canvas></div></div>
+<div class="card"><div class="card-title">Effect Category Detail</div><div class="card-sub">Top sub-effects within each theme. OCM 2024 Market Report, Fig 33.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px" id="effectCards"></div></div>
+<div class="card"><div class="note-box">Sleep + Relaxation together account for 49% of effect-labeled edible sales - positioning cannabis as a wellness/self-care product rather than a recreational substance. This aligns with Gen Z and Millennial consumer behavior: New Frontier Data and BDSA report that anxiety relief, sleep improvement, and focus are leading reasons for consumption among younger adults. The emerging "Energy" segment (21%) signals growing daytime-use adoption. (OCM 2024 Market Report, Finding #8; New Frontier Data; BDSA)</div></div>
+</div>
+
+<div class="footer">
+<strong style="color:var(--text)">Primary Sources:</strong> NYS OCM 2025 Annual Report (Dec 2025) - NYS OCM 2024 Market Report (Jun 2025) - OCM 2023 Annual Report - MRTA Implementation Report (2024) - Headset POS Brand Export (Mar 2026) - Headset Market Data via Flowhub/GreenState/Cannabis Business Times (2025-2026) - NYS DOH BRFSS 2018-2023 - BDSA 2025 Cannabis Market Forecasts - Whitney Economics 2026 Cannabis Industry Report - New Frontier Data - MJBizDaily (Mar 2026) - SAMHSA NSDUH - Pew Research - Gallup - CDC YRBS 2021
+<br><br>
+<strong style="color:var(--text)">Methodology:</strong> Actual category share data from OCM reports and Headset POS tracking. Projected values (P) derived from a <strong style="color:var(--accent)">demographic-weighted model</strong>: Category_Share(t) = Sum[GenWeight(gen,t) x (BasePref(gen,cat) + Drift(gen,cat) x years)] across Gen Z, Millennial, Gen X, and Boomer cohorts. Three interacting forces modeled: (1) demographic weight shift (Gen Z 24% to 33% of total spend), (2) intra-cohort preference drift (BRFSS 2018-2023 mode trends, Headset category YoY), (3) compounding interaction effects.
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CHART.JS DEFAULTS
+// ═══════════════════════════════════════════════════════════
+Chart.defaults.color = '#7b8ba5';
+Chart.defaults.borderColor = '#162035';
+Chart.defaults.font.family = "'Courier New', monospace";
+Chart.defaults.font.size = 10;
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.animation.duration = 600;
+
+const C = {bg:'#0b1120',card:'#0f1729',border:'#1a2744',text:'#e8edf5',muted:'#7b8ba5',accent:'#22d3a7',rose:'#f43f7a',amber:'#f5a623',blue:'#3b82f6',violet:'#8b5cf6',cyan:'#06b6d4',emerald:'#10b981',teal:'#14b8a6',orange:'#f97316',pink:'#ec4899'};
+
+// Source-aware tooltip
+function srcTooltip(src) {
+  return { callbacks: {
+    afterBody: function(ctx) { return src ? ['','\ud83d\udcce ' + (typeof src === 'function' ? src(ctx[0].dataIndex) : src)] : []; }
+  }, backgroundColor:'rgba(15,23,41,0.95)', borderColor:C.border, borderWidth:1, titleFont:{weight:'bold',size:12}, bodyFont:{size:11}, padding:12, cornerRadius:8, displayColors:true,
+    bodyColor:C.text, titleColor:C.text };
+}
+
+// ═══════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════════════
+let chartInstances = {};
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  // Lazy init charts
+  setTimeout(() => initCharts(id), 50);
+}
+function switchMicro(id) {
+  document.querySelectorAll('.micro-panel').forEach(el => el.style.display='none');
+  document.querySelectorAll('.micro-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('micro-'+id).style.display='block';
+  event.target.classList.add('active');
+  setTimeout(() => initMicroCharts(id), 50);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════
+const macroLabels = ['Dec 2023','Nov 2024','Feb 2026','2027P','2028P'];
+const macroSrc = [
+  'OCM 2023 Annual Report, Fig 2 (prelim est., Dec 9 2023)',
+  'OCM 2024 Market Report, Fig 12 (week of 11/3/2024)',
+  'Headset POS Data, Feb 2026 (NY market)',
+  'Demographic-weighted model: GenZ 29% x drifted prefs + Mill 35% + GenX 21% + Boom 11%. Inputs: Headset, BRFSS, BDSA',
+  'Demographic-weighted model: GenZ 33% + Mill 33% + GenX 20% + Boom 10%. GenZ reaches parity with Millennials. Sources: Headset, BRFSS, BDSA, NYU CDUHR'
+];
+
+// Revenue shares (computed from demographic model for 2027P/2028P)
+const macroData = {
+  Flower:    [31, 33, 35.3, 35.8, 33.9],
+  PreRoll:   [15, 12, 19.0, 14.0, 14.7],
+  Vaporizer: [27, 28, 25.0, 27.0, 28.0],
+  Edibles:   [17, 14, 14.5, 12.6, 12.9],
+  Concentrate:[7, 11, 3.1, 3.6, 3.6],
+  Tincture:  [1, 1, 1.0, 1.4, 1.4],
+  Tablets:   [1, 1, 0.6, 0.7, 0.7],
+  Topical:   [0.2, 0.2, 0.5, 0.8, 0.9]
+};
+
+// Unit share conversion
+const avgPrices = [
+  {Flower:52,PreRoll:15,Vaporizer:62,Edibles:22,Concentrate:45,Tincture:48,Tablets:30,Topical:35},
+  {Flower:44,PreRoll:13.55,Vaporizer:58,Edibles:20,Concentrate:40,Tincture:45,Tablets:28,Topical:32},
+  {Flower:39,PreRoll:12,Vaporizer:52,Edibles:18,Concentrate:38,Tincture:42,Tablets:26,Topical:30},
+  {Flower:34,PreRoll:11,Vaporizer:46,Edibles:16,Concentrate:35,Tincture:40,Tablets:24,Topical:28},
+  {Flower:30,PreRoll:10,Vaporizer:42,Edibles:15,Concentrate:32,Tincture:38,Tablets:22,Topical:26}
+];
+const unitSrc = [
+  'Unit conversion: OCM 2023 Annual Report avg prices. Edibles lead in units at ~27%',
+  'Unit conversion: OCM 2024 Market Report, Table 2 & Figs 23/27',
+  'Unit conversion: Headset Feb 2026 + OCM pricing trajectory. Price compression ~12.7% YoY',
+  'Projected units: revenue/projected avg prices (10-15% annual compression)',
+  'Projected units: 2028P prices at mature-market convergence. Sources: OCM, Headset, Cannabis Benchmarks'
+];
+
+function computeUnitShares() {
+  const cats = ['Flower','PreRoll','Vaporizer','Edibles','Concentrate','Tincture'];
+  const result = {};
+  cats.forEach(c => result[c] = []);
+  for (let i = 0; i < 5; i++) {
+    let raw = {}, total = 0;
+    cats.forEach(c => { const u = (macroData[c][i]||0)/(avgPrices[i][c]||1); raw[c]=u; total+=u; });
+    cats.forEach(c => result[c].push(Math.round(raw[c]/total*1000)/10));
+  }
+  return result;
+}
+const unitData = computeUnitShares();
+
+// Gen weight data
+const genWeightLabels = ['2023','2024','2025E','2026P','2027P','2028P'];
+const genWeightSrc = [
+  'Headset 2023 baseline; GenZ ~15% with only 21-26 cohort active',
+  'Headset Sept 2024; GenZ $43.2M/mo, Mill $103.9M, GenX $56.7M, Boom $29.2M (Flowhub/CBT)',
+  'Est: GenZ +11% YoY (Headset); Boomer 65+ +46% 2021-23 (NYU CDUHR) but diluted',
+  'Proj: GenZ 21-29 fully active; 11% CAGR. Millennials plateau. Sources: Headset, Flowhub',
+  'Proj: GenZ overtakes GenX for first time. ~2M Americans turn 21 annually (Census)',
+  'Proj: GenZ reaches parity with Millennials at 33% each. Combined = 66%. Sources: Headset, NYU CDUHR, BDSA, Flowhub'
+];
+const genWeightData = {
+  GenZ: [15, 18.5, 21.5, 24, 29, 33],
+  Millennial: [42, 40, 38.5, 37, 35, 33],
+  GenX: [25, 24.3, 23.5, 23, 21, 20],
+  Boomer: [13, 12.5, 12.2, 12, 11, 10]
+};
+
+// Age prevalence
+const ageLabels = ['2018','2019','2020','2021','2022','2023','2025E','2026P','2027P','2028P'];
+const ageSrc = [
+  'MRTA Report, Fig 19 - BRFSS 2018','MRTA Report, Fig 19 - BRFSS 2019','MRTA Report, Fig 19 - BRFSS 2020',
+  'MRTA Report, Fig 19 - BRFSS 2021 (legalization)','MRTA Report, Fig 19 - BRFSS 2022','OCM 2025 Annual Report, Table 29 - BRFSS 2023',
+  'Projected: 65+ fastest growth (+46% 2021-23, NYU CDUHR); 18-20 declining post-legalization',
+  'Projected: 25-54 bands accelerate with dispensary expansion; 65+ continues outsized growth',
+  'Projected: 21-24 saturation ~35% ceiling; 35-54 steepest gains; suburban opt-in expansion',
+  'Projected: 65+ approaches 10%; CO/WA convergence. Sources: BRFSS, SAMHSA NSDUH, NYU CDUHR'
+];
+const ageData = {
+  '21-24': [19.4,27.8,27.8,29.3,29.3,31.7,33,34,35,35.5],
+  '18-20': [26.8,26.6,27.8,27.8,27.8,24,22,21,20,19],
+  '25-34': [12.7,17.9,18,17.9,17.9,22.3,24,25,26,27],
+  '35-44': [7.1,11.6,12,11.6,11.6,18.7,20,21,22,23],
+  '45-54': [7.4,9.9,10,9.9,9.9,13.2,14.5,15.5,16.5,17.5],
+  '55-64': [3.8,5.2,5.5,5.2,5.2,8,9.5,10.5,11.5,12.5],
+  '65+': [2.5,3,3.2,3.5,4,5.1,6.5,7.5,8.5,9.5]
+};
+
+// Demo prevalence
+const demoLabels = ['2018','2019','2020','2021','2022','2023','2025E','2026P','2027P','2028P'];
+const demoSrc = [
+  'MRTA Report, BRFSS 2018 (extrapolated)','MRTA Report, BRFSS 2019','MRTA Report, BRFSS 2020',
+  'MRTA Report, BRFSS 2021 (legalization)','MRTA Report - BRFSS 2022: Male 19%, Female 11.2%, LGBTQ+ 31.3%',
+  'OCM 2025 Annual Report, Table 29 - BRFSS 2023',
+  'Proj: Female +1pp/yr (Forbes/Monitoring the Future); LGBTQ+ wellness-driven (BDSA/NFD)',
+  'Proj: Gender gap narrowing; LGBTQ+ approaching 40%',
+  'Proj: Female approaches male in under-35 cohorts (NFD); LGBTQ+ stabilizing',
+  'Proj: Gap narrows 5.3pp to ~3.5pp; LGBTQ+ decelerates near saturation'
+];
+const demoData = {
+  'LGBTQ+': [28,29,30,30.5,31.3,35.6,38,39.5,41,42],
+  Male: [15,15.8,16,16.2,19,17.4,18.5,19,19.5,20],
+  Female: [9,9.6,9.8,10,11.2,12.1,13.5,14.5,15.5,16.5],
+  'Het./Cis.': [11,11.5,11.8,12,14,13.2,14,14.5,15,15.5]
+};
+
+// Race
+const raceLabels = ['2018','2020','2022','2023','2025E','2026P','2028P'];
+const raceSrc = [
+  'MRTA Report - BRFSS 2018 est.','MRTA Report - BRFSS 2020','MRTA Report - BRFSS 2022',
+  'OCM 2025 Annual Report, Table 29 - BRFSS 2023',
+  'Proj: Black & White at near-parity; Hispanic growth via bilingual marketing',
+  'Proj: CAURD equity dispensary placement drives adoption in underserved communities',
+  'Proj: Hispanic convergence; Asian growth from low base; Multiracial plateaus ~42%'
+];
+const raceData = {
+  Multiracial: [30,32,35,37.1,39,40,42],
+  Black: [13,14.5,15.5,16.2,17.5,18,19.5],
+  White: [12.5,13.5,15,16.1,17,17.5,18.5],
+  Hispanic: [9,9.5,10.5,11,12.5,13.5,15],
+  Asian: [7,8,9.5,10.2,11.5,12.5,14]
+};
+
+// Prevalence trend
+const prevLabels = ['2018','2019','2020','2021','2022','2023','2025E','2026P','2027P','2028P'];
+const prevSrc = [
+  'OCM 2025 Annual Report, Table 28 - BRFSS 2018','BRFSS 2019','BRFSS 2020',
+  'BRFSS 2021 (MRTA legalization)','BRFSS 2022','BRFSS 2023',
+  'Proj: +0.65pp/yr; 606 stores expanding access','Proj: ~800 stores; suburban expansion',
+  'Proj: Growth decelerates; aligns with CO trajectory','Proj: ~19% ceiling (CO 22.6%, WA 21.3% per NSDUH)'
+];
+const prevData = {current:[11.9,12.7,12.8,12.6,14.9,14.7,16,17,18,19], daily:[5.1,5,6,5.9,7,6.7,7.5,8,8.5,9]};
+
+// Consumption mode
+const modeLabels = ['2018','2019','2020','2021','2022','2024E','2026E','2028P'];
+const modeSrc = [
+  'MRTA Report, Fig 21 - BRFSS 2018','BRFSS 2019','BRFSS 2020','BRFSS 2021','BRFSS 2022',
+  'Est: trajectory extrapolation from BRFSS 2018-2022',
+  'Proj: continued edible/dab growth; smoking decline ~2pp/yr',
+  'Proj: national convergence with mature-market mode mix'
+];
+const modeData = {
+  Smoke:[76.4,74.2,72,71.5,69.8,65,60,55],
+  Eat:[7,6.1,8.5,9.8,12.3,16,19,22],
+  Vaporize:[14.3,15.1,14.8,13,13.6,14,15,16],
+  Dab:[1.6,2,2.3,2.8,3.2,4,5,6]
+};
+
+// Reason
+const reasonLabels = ['2018','2019','2020','2022'];
+const reasonSrc = ['MRTA Report, Fig 20 - BRFSS 2018','BRFSS 2019','BRFSS 2020','BRFSS 2022 (post-legalization)'];
+const reasonData = {NonMed:[51.7,49.1,44.4,52.1],Both:[32.4,33.9,36.3,34.5],MedOnly:[16,17.1,19.2,13.5]};
+
+// Gen spending
+const genSpendLabels = ['Gen Z','Millennial','Gen X','Boomer'];
+const genSpendSrc = [
+  'Headset via GreenState/Flowhub 2026; Gen Z: vape-dominant',
+  'Headset via Flowhub 2025; Millennials = 45% of pre-roll market',
+  'Headset via Flowhub/Crescent Canna; flower-dominant',
+  'Headset via CBT 2026; Boomers: 37.6% flower, 14.4% vape'
+];
+const genSpendData = {Flower:[32.5,40.1,44,50],VapePens:[38,25.7,22,14.4],PreRoll:[13,15,12,8],Edibles:[10,12,14,17],Other:[6.5,7.2,8,10.6]};
+
+// Effects
+const effectLabels = ['Sleep','Relaxation','Energetic','Balance','Clarity','Recovery','Connection','Euphoria'];
+const effectValues = [26,23,21,9,6,6,5,5];
+const effectSubs = ['Sleep 25.7%, Bliss 6.7%, Chill 5.8%, Calm 5.5%','Relax 4.4%, Serenity 0.5%, Zen 0.4%','Energy 14.6%, Awaken 2.2%, Boost 2.1%','Balance 8.9%, Focus 4.0%, Creative 1.2%','Focus, Creative, Flow, Genius','Revive, Restore, Recovery, PMS Relief','Intimacy 4.4%, Social 0.7%','Uplift 3.5%, Fly 0.7%, Exhilaration 0.7%'];
+const effectColors = [C.violet,C.blue,C.amber,C.teal,C.cyan,C.emerald,C.rose,C.pink];
+
+// Micro data
+const microPrerollLabels = ['2023','2024','2025E','2026P','2027P','2028P'];
+const microPrerollSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 17 & 19','Est: infused +3pp/yr (BDSA 44.5% nationally)','Proj: infused approaches parity with singles; BDSA 10% CAGR','Proj: infused overtakes singles (national trend)','Proj: infused #1; aligns with CO/WA. Sources: BDSA, Headset, OCM'];
+const microEdibleLabels = microPrerollLabels;
+const microEdibleSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 22 & 24','Est: bev +88% YoY (Headset); Whitney NY bev TAM $660M','Proj: bev doubles; BDSA +15% nationally','Proj: bev ~20% of edibles; Farm Bill may redirect hemp-THC demand','Proj: bev ~25%; gummies floor ~64%. Sources: BDSA, Whitney, Headset'];
+const microVapeLabels = microPrerollLabels;
+const microVapeSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 25-27','Est: disposable growing (Gen Z); 2g emerging; 0.5g declining','Proj: disposables approach parity; CA vape overtook flower (CBT)','Proj: Gen Z expansion +11%/yr (Headset); regulatory risk on disposables','Proj: disposable dominant; 0.5g floor; 2g doubles. Sources: Headset, CBT, CA DCC'];
+const microConcLabels = microPrerollLabels;
+const microConcSrc = ['OCM 2023 Annual Report est.','OCM 2024 Market Report, Fig 19 & 20','Est: infused PR grows; live rosin gaining as premium','Proj: live rosin doubles; hash contracts','Proj: live rosin = premium counterpoint to infused PR','Proj: infused PR plateau ~64%; live rosin triples. Sources: OCM, BDSA, Headset'];
+const microFlowerLabels = microPrerollLabels;
+const microFlowerSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 14 & Table 2','Est: ounce growing; illicit-to-legal consumers want value','Proj: ounce +4pp; price compression makes bulk accessible','Proj: ounce ~20%; wholesale stabilizing ($1020-1090/lb Cannabis Benchmarks)','Proj: eighth ~52% floor; ounce ~22%. Sources: OCM, Cannabis Benchmarks, Headset, LeafLink'];
+
+// Pie data
+const prerollPieData = [{l:'Singles (non-infused)',v:33,p:'$12',c:C.blue},{l:'5+ Multi-Pack',v:27,p:'$38',c:C.cyan},{l:'Infused Pre-Roll',v:22,p:'$28.27',c:C.rose},{l:'Blunt (non-inf.)',v:8,p:'$15',c:C.teal},{l:'Infused Blunt',v:6,p:'$39.27',c:C.pink},{l:'2-4 Pack',v:4,p:'$25',c:C.muted}];
+const ediblePieData = [{l:'Gummies',v:84,p:'$26.58',c:C.amber},{l:'Bev (Can)',v:7,p:'$4.96',c:C.accent},{l:'Chocolates',v:5,p:'$27.46',c:C.orange},{l:'Bev (Other)',v:2,p:'$9.28',c:C.teal},{l:'Other',v:2,p:'$18',c:C.muted}];
+const vapePieData = [{l:'Cart 1g',v:69,p:'$65.75',c:C.violet},{l:'Cart 0.5g',v:20,p:'$44.15',c:C.pink},{l:'Cart 2g',v:9,p:'$93.47',c:C.blue},{l:'Other',v:2,p:'$50',c:C.muted}];
+const concPieData = [{l:'Infused Pre-Roll',v:58,p:'$28.27',c:C.rose},{l:'Infused Flower',v:11,p:'$79.81',c:C.amber},{l:'Moonrocks',v:7,p:'$53.23',c:C.teal},{l:'Pure Conc.',v:5,p:'$58.62',c:C.cyan},{l:'Live Resin',v:4,p:'$65.32',c:C.blue},{l:'Hash',v:3,p:'$47.91',c:C.emerald},{l:'Live Rosin',v:2,p:'$77.65',c:C.violet},{l:'Other',v:10,p:'$45',c:C.muted}];
+const flowerPieData = [{l:'3.5g (Eighth)',v:63,p:'$44',c:C.blue},{l:'28g (Ounce)',v:14,p:'$196',c:C.cyan},{l:'14g (Half)',v:12,p:'$112',c:C.teal},{l:'7g (Quarter)',v:9,p:'$69',c:C.emerald},{l:'Sub-3.5g',v:1,p:'$25',c:C.muted},{l:'Over 28g',v:1,p:'$250',c:C.violet}];
+
+// ═══════════════════════════════════════════════════════════
+// CHART BUILDERS
+// ═══════════════════════════════════════════════════════════
+function makeLineChart(canvasId, labels, datasets, yMax, srcArr, annotation) {
+  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  chartInstances[canvasId] = new Chart(ctx, {
+    type:'line',
+    data:{ labels, datasets: datasets.map(d => ({
+      label:d.label, data:d.data, borderColor:d.color, backgroundColor:d.color+'20',
+      borderWidth:d.major?2.5:1.5, borderDash:d.major?[]:[4,2], pointRadius:d.major?4:3,
+      pointBackgroundColor:d.color, pointBorderColor:C.bg, pointBorderWidth:2, tension:0.3, fill:false
+    }))},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{ y:{ beginAtZero:true, max:yMax, ticks:{callback:v=>v+'%'}, grid:{color:C.border} }, x:{ grid:{color:C.border} }},
+      plugins:{
+        tooltip: srcTooltip(function(i){ return srcArr[i]; }),
+        annotation: annotation ? { annotations: { line1: { type:'line', xMin:annotation, xMax:annotation, borderColor:C.rose, borderDash:[4,4], borderWidth:1,
+          label:{display:true,content:'ACTUAL > PROJ',color:C.rose,font:{size:8,family:'monospace'},position:'start'} }}} : undefined
+      }
+    }
+  });
+}
+
+function makeStackedBar(canvasId, labels, datasets, yMax, srcArr) {
+  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  chartInstances[canvasId] = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets: datasets.map(d => ({ label:d.label, data:d.data, backgroundColor:d.color, borderRadius:2 }))},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{ y:{ stacked:true, max:yMax, ticks:{callback:v=>v+'%'}, grid:{color:C.border} }, x:{ stacked:true, grid:{color:C.border} }},
+      plugins:{ tooltip: srcTooltip(function(i){ return srcArr[i]; }) }
+    }
+  });
+}
+
+function makePie(canvasId, legendId, pieData) {
+  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  chartInstances[canvasId] = new Chart(ctx, {
+    type:'doughnut',
+    data:{ labels:pieData.map(d=>d.l), datasets:[{ data:pieData.map(d=>d.v), backgroundColor:pieData.map(d=>d.c), borderWidth:0 }]},
+    options:{ responsive:false, cutout:'45%',
+      plugins:{ tooltip:{ callbacks:{ label:function(ctx){ const d=pieData[ctx.dataIndex]; return d.l+': '+d.v+'% (avg '+d.p+')'; } },
+        backgroundColor:'rgba(15,23,41,0.95)',borderColor:C.border,borderWidth:1,padding:10,cornerRadius:8,bodyColor:C.text,titleColor:C.text }}
+    }
+  });
+  // Legend
+  const el = document.getElementById(legendId);
+  if(el) el.innerHTML = pieData.map(d => '<div class="pie-legend-row"><span class="pie-swatch" style="background:'+d.c+'"></span><span style="color:'+C.text+';flex:1">'+d.l+'</span><span style="color:'+C.muted+'">'+d.v+'%</span><span style="color:'+C.amber+'">~'+d.p+'</span></div>').join('');
+}
+
+function makeRadar(canvasId) {
+  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  chartInstances[canvasId] = new Chart(ctx, {
+    type:'radar',
+    data:{ labels:effectLabels, datasets:[{ label:'Share of Effect-Labeled Sales', data:effectValues,
+      borderColor:C.accent, backgroundColor:C.accent+'33', borderWidth:2.5, pointBackgroundColor:C.accent, pointRadius:5, pointBorderColor:C.bg, pointBorderWidth:2 }]},
+    options:{ responsive:false,
+      scales:{ r:{ beginAtZero:true, max:30, ticks:{display:true,color:C.muted,stepSize:10,backdropColor:'transparent'}, grid:{color:C.border}, pointLabels:{color:C.text,font:{size:11,family:'monospace'}} }},
+      plugins:{ tooltip:{ callbacks:{ afterLabel:function(ctx){ return effectSubs[ctx.dataIndex]+' (OCM 2024 Market Report, Fig 33)'; } },
+        backgroundColor:'rgba(15,23,41,0.95)',borderColor:C.border,borderWidth:1,padding:10,cornerRadius:8,bodyColor:C.text,titleColor:C.text }}
+    }
+  });
+  // Effect cards
+  const el = document.getElementById('effectCards');
+  if(el) el.innerHTML = effectLabels.map((e,i) => '<div style="background:rgba(15,23,41,0.5);border:1px solid '+C.border+';border-radius:8px;padding:10px;border-left:3px solid '+effectColors[i]+'"><div style="font-size:12px;font-weight:700;color:'+effectColors[i]+';margin-bottom:2px">'+e+' - '+effectValues[i]+'%</div><div style="font-size:9px;color:'+C.muted+';font-family:monospace;line-height:1.5">'+effectSubs[i]+'</div></div>').join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+function initCharts(tab) {
+  if (tab === 'macro') {
+    const cats = ['Flower','PreRoll','Vaporizer','Edibles','Concentrate','Tincture','Tablets','Topical'];
+    const colors = [C.blue,C.rose,C.violet,C.amber,C.cyan,C.emerald,C.pink,C.orange];
+    makeLineChart('macroRevChart', macroLabels, cats.map((c,i)=>({label:c,data:macroData[c],color:colors[i],major:i<5})), 40, macroSrc, 'Feb 2026');
+    const unitCats = ['Edibles','PreRoll','Flower','Vaporizer','Concentrate','Tincture'];
+    const uColors = [C.amber,C.rose,C.blue,C.violet,C.cyan,C.emerald];
+    makeLineChart('macroUnitChart', macroLabels, unitCats.map((c,i)=>({label:c,data:unitData[c],color:uColors[i],major:i<4})), 35, unitSrc, 'Feb 2026');
+    makeLineChart('genWeightChart', genWeightLabels, [
+      {label:'Gen Z',data:genWeightData.GenZ,color:C.violet,major:true},
+      {label:'Millennial',data:genWeightData.Millennial,color:C.blue,major:true},
+      {label:'Gen X',data:genWeightData.GenX,color:C.amber,major:false},
+      {label:'Boomer',data:genWeightData.Boomer,color:C.emerald,major:false}
+    ], 50, genWeightSrc, '2024');
+  }
+  if (tab === 'demo') {
+    const ageDs = Object.entries(ageData).map(([k,v],i) => {
+      const colors = [C.rose,C.amber,C.blue,C.violet,C.cyan,C.emerald,C.accent];
+      return {label:k,data:v,color:colors[i],major:i<4};
+    });
+    makeLineChart('ageChart', ageLabels, ageDs, 40, ageSrc, '2023');
+    makeLineChart('demoChart', demoLabels, [
+      {label:'LGBTQ+',data:demoData['LGBTQ+'],color:C.rose,major:true},
+      {label:'Male',data:demoData.Male,color:C.blue,major:true},
+      {label:'Female',data:demoData.Female,color:C.pink,major:true},
+      {label:'Het./Cis.',data:demoData['Het./Cis.'],color:C.muted,major:false}
+    ], 50, demoSrc, '2023');
+    makeLineChart('raceChart', raceLabels, [
+      {label:'Multiracial',data:raceData.Multiracial,color:C.rose,major:true},
+      {label:'Black',data:raceData.Black,color:C.blue,major:true},
+      {label:'White',data:raceData.White,color:C.amber,major:true},
+      {label:'Hispanic',data:raceData.Hispanic,color:C.violet,major:false},
+      {label:'Asian',data:raceData.Asian,color:C.cyan,major:false}
+    ], 45, raceSrc, '2023');
+    makeLineChart('prevChart', prevLabels, [
+      {label:'Current (past 30d)',data:prevData.current,color:C.blue,major:true},
+      {label:'Daily/Near-Daily',data:prevData.daily,color:C.rose,major:false}
+    ], 22, prevSrc, '2023');
+  }
+  if (tab === 'gen') {
+    makeStackedBar('genSpendChart', genSpendLabels, [
+      {label:'Flower',data:genSpendData.Flower,color:C.blue},
+      {label:'Vapor Pens',data:genSpendData.VapePens,color:C.violet},
+      {label:'Pre-Roll',data:genSpendData.PreRoll,color:C.rose},
+      {label:'Edibles',data:genSpendData.Edibles,color:C.amber},
+      {label:'Other',data:genSpendData.Other,color:C.muted}
+    ], 100, genSpendSrc);
+  }
+  if (tab === 'mode') {
+    makeLineChart('modeChart', modeLabels, [
+      {label:'Smoke',data:modeData.Smoke,color:C.orange,major:true},
+      {label:'Eat',data:modeData.Eat,color:C.amber,major:true},
+      {label:'Vaporize',data:modeData.Vaporize,color:C.violet,major:false},
+      {label:'Dab',data:modeData.Dab,color:C.cyan,major:false}
+    ], 85, modeSrc, '2022');
+    makeStackedBar('reasonChart', reasonLabels, [
+      {label:'Non-Medical Only',data:reasonData.NonMed,color:C.blue},
+      {label:'Both Med & Non-Med',data:reasonData.Both,color:C.violet},
+      {label:'Medical Only',data:reasonData.MedOnly,color:C.emerald}
+    ], 100, reasonSrc);
+  }
+  if (tab === 'effects') {
+    makeRadar('radarChart');
+  }
+}
+
+function initMicroCharts(id) {
+  if (id === 'preroll') {
+    makeLineChart('prerollLineChart', microPrerollLabels, [
+      {label:'Singles',data:[40,33,30,27,24,21],color:C.blue,major:true},
+      {label:'5+ Pack',data:[20,27,28,29,29,28],color:C.cyan,major:true},
+      {label:'Infused',data:[15,22,25,27,30,33],color:C.rose,major:true},
+      {label:'Blunt',data:[12,8,7,7,6,5],color:C.teal,major:false},
+      {label:'Infused Blunt',data:[3,6,6,7,8,9],color:C.pink,major:false}
+    ], 45, microPrerollSrc, '2024');
+    makePie('prerollPie','prerollPieLegend',prerollPieData);
+  }
+  if (id === 'edible') {
+    makeLineChart('edibleLineChart', microEdibleLabels, [
+      {label:'Gummies',data:[90,84,79,74,69,64],color:C.amber,major:true},
+      {label:'Bev (Can)',data:[3,7,10,13,16,19],color:C.accent,major:true},
+      {label:'Chocolates',data:[4,5,5,5,5,5],color:C.orange,major:false},
+      {label:'Bev (Other)',data:[1,2,3,4,5,6],color:C.teal,major:false}
+    ], 95, microEdibleSrc, '2024');
+    makePie('ediblePie','ediblePieLegend',ediblePieData);
+  }
+  if (id === 'vape') {
+    makeLineChart('vapeLineChart', microVapeLabels, [
+      {label:'Cart 1g',data:[60,69,67,64,61,58],color:C.violet,major:true},
+      {label:'Disposable',data:[30,37,40,43,45,47],color:C.rose,major:true},
+      {label:'Cart 0.5g',data:[25,20,17,15,13,11],color:C.pink,major:false},
+      {label:'Cart 2g',data:[4,9,12,14,16,18],color:C.blue,major:false}
+    ], 75, microVapeSrc, '2024');
+    makePie('vapePie','vapePieLegend',vapePieData);
+  }
+  if (id === 'conc') {
+    makeLineChart('concLineChart', microConcLabels, [
+      {label:'Infused PR',data:[48,58,60,62,63,64],color:C.rose,major:true},
+      {label:'Infused Flower',data:[14,11,10,9,8,7],color:C.amber,major:true},
+      {label:'Live Rosin',data:[3,2,3,4,5,6],color:C.violet,major:false},
+      {label:'Moonrocks',data:[8,7,7,6,5,5],color:C.teal,major:false},
+      {label:'Hash',data:[5,3,3,2,2,2],color:C.emerald,major:false}
+    ], 70, microConcSrc, '2024');
+    makePie('concPie','concPieLegend',concPieData);
+  }
+  if (id === 'flower') {
+    makeLineChart('flowerLineChart', microFlowerLabels, [
+      {label:'3.5g (Eighth)',data:[68,63,60,57,55,52],color:C.blue,major:true},
+      {label:'28g (Ounce)',data:[10,14,16,18,20,22],color:C.cyan,major:true},
+      {label:'14g (Half)',data:[10,12,12,13,13,13],color:C.teal,major:false},
+      {label:'7g (Quarter)',data:[8,9,9,9,9,10],color:C.emerald,major:false}
+    ], 75, microFlowerSrc, '2024');
+    makePie('flowerPie','flowerPieLegend',flowerPieData);
+  }
+}
+
+// Init first tab on load
+window.addEventListener('load', () => {
+  initCharts('macro');
+});
+</script>
+</body>
+</html>
