@@ -3,590 +3,927 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFNY Social PEST - Category Sales Mix, Demographics & Behavioral Trends</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<title>NYS Cannabis — Opt-Out & Dispensary Saturation</title>
 <style>
-:root{--bg:#0b1120;--card:#0f1729;--border:#1a2744;--text:#e8edf5;--muted:#7b8ba5;--accent:#22d3a7;--rose:#f43f7a;--amber:#f5a623;--blue:#3b82f6;--violet:#8b5cf6;--cyan:#06b6d4;--emerald:#10b981;--teal:#14b8a6;--orange:#f97316;--pink:#ec4899;--grid:#162035}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:20px 14px;max-width:960px;margin:0 auto}
-.mono{font-family:'Courier New',monospace}
-.header-tag{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:5px}
-h1{font-size:24px;font-weight:800;line-height:1.15}
-h1 span{background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.sub-header{font-size:10px;color:var(--muted);margin-top:5px}
-.tabs{display:flex;gap:3px;margin-bottom:18px;overflow-x:auto;background:rgba(15,23,41,0.6);border-radius:8px;padding:3px;border:1px solid var(--border)}
-.tab-btn{padding:7px 13px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Courier New',monospace;background:transparent;color:var(--muted);transition:all 0.15s}
-.tab-btn.active{background:var(--accent);color:var(--bg)}
-.tab-content{display:none}.tab-content.active{display:block}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:18px}
-.card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
-.card-sub{font-size:10px;color:var(--muted);margin-bottom:14px;font-family:'Courier New',monospace;line-height:1.5}
-.note-box{margin-top:14px;padding:10px 14px;background:rgba(34,211,167,0.05);border-radius:8px;border:1px solid rgba(34,211,167,0.12);font-size:10px;color:var(--muted);line-height:1.6;font-family:'Courier New',monospace}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.stat{background:linear-gradient(135deg,var(--card) 0%,rgba(34,211,167,0.03) 100%);border:1px solid var(--border);border-radius:10px;padding:14px 16px;flex:1;min-width:140}
-.stat-label{font-size:9.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:5px;font-family:'Courier New',monospace}
-.stat-val{font-size:22px;font-weight:800;color:var(--text);line-height:1.1}
-.stat-sub{font-size:9.5px;margin-top:3px;font-family:'Courier New',monospace}
-.chart-wrap{position:relative;width:100%;margin-bottom:8px}
-.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;justify-content:center}
-.legend-item{display:flex;align-items:center;gap:4px;font-size:9.5px;font-family:'Courier New',monospace;color:var(--muted)}
-.legend-swatch{width:12px;height:3px;border-radius:1px;display:inline-block}
-.micro-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;background:rgba(15,23,41,0.6);border-radius:8px;padding:3px;border:1px solid var(--border)}
-.micro-btn{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Courier New',monospace;background:transparent;color:var(--muted);transition:all 0.15s}
-.micro-btn.active{background:var(--accent);color:var(--bg)}
-.pie-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.pie-legend{flex:1;min-width:200px}
-.pie-legend-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:10px;font-family:'Courier New',monospace}
-.pie-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.footer{margin-top:20px;padding:14px 0;border-top:1px solid var(--border);font-size:8px;color:var(--muted);font-family:'Courier New',monospace;line-height:1.7}
-canvas{max-width:100%}
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+:root{--bg:#07090f;--s1:#0d1220;--s2:#131a2c;--s3:#1a2438;--bd:#1e2d48;--tx:#b0c4de;--mu:#3a5272;--gr:#00d990;--am:#f5a623;--pk:#e03868;--wh:#eaf0fc;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100vh;}
+.hdr{display:flex;align-items:center;padding:9px 18px;border-bottom:1px solid var(--bd);background:var(--s1);flex-shrink:0;}
+.hdr h1{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--wh);}
+.hdr p{font-family:'Space Mono',monospace;font-size:9px;color:var(--mu);letter-spacing:.08em;margin-top:2px;}
+.stats{display:flex;border-bottom:1px solid var(--bd);background:var(--s1);flex-shrink:0;}
+.stat{flex:1;padding:7px 14px;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;line-height:1.1;}
+.stat-l{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
+.body{display:flex;flex:1;overflow:hidden;min-height:0;}
+#mw{flex:1;position:relative;overflow:hidden;background:var(--bg);}
+#map{width:100%;height:100%;display:block;}
+.county-path{stroke:#0c1522;stroke-width:.5;cursor:pointer;}
+.county-path:hover{filter:brightness(1.3);}
+.vor-cell{stroke:#040c14;stroke-width:.22;cursor:pointer;}
+.vor-cell:hover{filter:brightness(1.4);}
+#tt{position:absolute;pointer-events:none;opacity:0;transition:opacity .07s;background:var(--s2);border:1px solid var(--bd);border-radius:5px;padding:9px 12px;min-width:172px;z-index:999;font-size:11px;}
+#tt.vis{opacity:1;}
+.tt-name{font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:var(--wh);margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--bd);}
+.tt-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;font-size:10px;}
+.tt-val{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;}
+.tt-hint{font-family:'Space Mono',monospace;font-size:7.5px;color:var(--mu);margin-top:5px;letter-spacing:.05em;}
+#back-btn{position:absolute;top:12px;left:12px;background:var(--s2);border:1px solid var(--am);color:var(--am);border-radius:3px;padding:5px 11px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;cursor:pointer;z-index:20;display:none;align-items:center;gap:5px;}
+#back-btn.vis{display:flex;}
+#back-btn:hover{background:rgba(245,166,35,.1);}
+.zbg{position:absolute;left:12px;bottom:12px;display:flex;flex-direction:column;gap:2px;z-index:10;}
+.zb{width:25px;height:25px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:3px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;}
+.zb:hover{background:var(--s3);color:var(--wh);}
+.hint{position:absolute;right:12px;bottom:12px;font-family:'Space Mono',monospace;font-size:8px;color:var(--mu);text-align:right;line-height:1.8;z-index:10;}
+.panel{width:190px;flex-shrink:0;border-left:1px solid var(--bd);background:var(--s1);display:flex;flex-direction:column;overflow:hidden;}
+.ps-t{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:7px;}
+.tog{display:flex;align-items:center;gap:7px;padding:4px 7px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--tx);cursor:pointer;width:100%;font-size:10.5px;font-family:'DM Sans',sans-serif;margin-bottom:3px;transition:background .12s;text-align:left;}
+.tog.on{background:var(--s2);border-color:#2a3e5c;}
+.tog .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.grad{height:7px;border-radius:2px;margin:4px 0 2px;background:linear-gradient(90deg,#0d4a2c,#186b40,#706020,#8a3222,#6b1218);}
+.grad-l{display:flex;justify-content:space-between;font-size:8px;color:var(--mu);font-family:'Space Mono',monospace;}
+.bki{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:10px;}
+.rbr{margin-bottom:5px;}
+.rbr-lbl{display:flex;justify-content:space-between;font-size:8.5px;color:var(--tx);margin-bottom:2px;}
+.rbr-bg{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.rbr-fill{height:100%;border-radius:2px;background:var(--gr);}
+.note-t{font-size:8.5px;color:var(--mu);font-family:'Space Mono',monospace;line-height:1.7;}
+#pv-state,#pv-drill{padding:13px 12px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;flex:1;}
+#pv-drill{display:none;}
+.dsb{border-bottom:1px solid var(--bd);padding-bottom:9px;}
+.dsb-n{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;line-height:1.1;}
+.dsb-l{font-size:8.5px;color:var(--mu);margin-top:2px;}
+.muni-bar{height:6px;border-radius:3px;overflow:hidden;background:var(--s3);margin:4px 0;}
+.muni-bar-fill{height:100%;background:var(--gr);opacity:.65;}
+.muni-row{display:flex;align-items:center;gap:5px;padding:2.5px 0;border-bottom:1px solid #0b1624;font-size:8.5px;}
+.muni-row:last-child{border-bottom:none;}
+.muni-sq{width:7px;height:7px;border-radius:1.5px;flex-shrink:0;}
+.conf-b{font-family:'Space Mono',monospace;font-size:7px;color:var(--mu);margin-left:auto;flex-shrink:0;}
 </style>
 </head>
 <body>
-<div class="mono header-tag">MFNY Strategy - PEST Analysis - Social (S)</div>
-<h1>The Customer &amp; The Consumer:<br><span>Category Sales Mix, Demographics &amp; Behavioral Trends</span></h1>
-<div class="mono sub-header">NYS Legal Cannabis Market - Actual 2023-2026 - Projected 2026-2028 - Hover any data point for source citation</div>
-
-<div class="tabs" style="margin-top:18px">
-<button class="tab-btn active" onclick="switchTab('macro')">Macro Category Mix</button>
-<button class="tab-btn" onclick="switchTab('micro')">Sub-Category Deep Dive</button>
-<button class="tab-btn" onclick="switchTab('demo')">Demographics</button>
-<button class="tab-btn" onclick="switchTab('gen')">Generational Preferences</button>
-<button class="tab-btn" onclick="switchTab('mode')">Consumption Modes</button>
-<button class="tab-btn" onclick="switchTab('effects')">Product Effects</button>
+<div id="app">
+  <div class="hdr">
+    <div>
+      <h1>NYS Cannabis — Municipal Opt-Out &amp; Dispensary Saturation</h1>
+      <p id="hdr-sub">STATE VIEW · COUNTY-LEVEL · OCM OPT-OUT LIST · LAST UPDATED NOV 6, 2025</p>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-n" style="color:var(--gr)">599</div><div class="stat-l">Open Dispensaries</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--am)">~232</div><div class="stat-l">Licensed · Not Open</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--pk)">5,198</div><div class="stat-l">Pending Applications</div></div>
+    <div class="stat"><div class="stat-n" style="color:#6b9ad4">55%</div><div class="stat-l">Municipalities Opted Out</div></div>
+  </div>
+  <div class="body">
+    <div id="mw">
+      <svg id="map"><defs id="clip-defs"></defs></svg>
+      <div id="tt">
+        <div class="tt-name" id="tt-name"></div>
+        <div id="tt-county">
+          <div class="tt-row"><span>Opt-out rate</span><span class="tt-val" id="tt-oo"></span></div>
+          <div class="tt-row"><span>Region</span><span class="tt-val" id="tt-reg" style="font-size:9px"></span></div>
+          <div style="margin-top:5px;border-top:1px solid var(--bd);padding-top:4px">
+            <div class="tt-row"><span style="color:var(--gr)">● Open</span><span class="tt-val" id="tt-op" style="color:var(--gr)"></span></div>
+            <div class="tt-row"><span style="color:var(--am)">◎ Licensed</span><span class="tt-val" id="tt-li" style="color:var(--am)"></span></div>
+            <div class="tt-row"><span style="color:var(--pk)">○ Pending</span><span class="tt-val" id="tt-pe" style="color:var(--pk)"></span></div>
+          </div>
+          <div class="tt-hint">CLICK TO DRILL INTO MUNICIPALITY VIEW →</div>
+        </div>
+        <div id="tt-muni" style="display:none">
+          <div class="tt-row"><span>Status</span><span class="tt-val" id="tt-ms"></span></div>
+          <div class="tt-row"><span>County</span><span class="tt-val" id="tt-mc" style="font-size:9px"></span></div>
+          <div class="tt-hint" id="tt-mk"></div>
+        </div>
+      </div>
+      <button id="back-btn">← STATE VIEW</button>
+      <div class="zbg">
+        <button class="zb" id="zi">+</button>
+        <button class="zb" id="zo">−</button>
+        <button class="zb" id="zr" style="font-size:7px">FIT</button>
+      </div>
+      <div class="hint" id="hintbox">CLICK COUNTY TO DRILL DOWN<br>SCROLL TO ZOOM · DRAG TO PAN</div>
+    </div>
+    <div class="panel">
+      <div id="pv-state">
+        <div>
+          <div class="ps-t">Layers</div>
+          <button class="tog on" id="t-op"><span class="dot" style="background:var(--gr)"></span>Open dispensaries</button>
+          <button class="tog on" id="t-li"><span class="dot" style="border:1.5px solid var(--am);background:transparent"></span>Licensed · not open</button>
+          <button class="tog on" id="t-pe"><span class="dot" style="background:var(--pk);opacity:.4"></span>Pending apps</button>
+        </div>
+        <div>
+          <div class="ps-t">County Opt-Out Rate</div>
+          <div class="grad"></div>
+          <div class="grad-l"><span>0% opt-in</span><span>83% opt-out</span></div>
+          <div style="margin-top:5px" class="note-t">Green = dispensary-friendly. Red = majority of municipalities banned.</div>
+        </div>
+        <div>
+          <div class="ps-t">Bubble = Count</div>
+          <div style="display:flex;align-items:flex-end;gap:5px;margin-bottom:8px">
+            <svg width="68" height="26" style="overflow:visible">
+              <circle cx="7" cy="21" r="3" fill="none" stroke="#3a5272" stroke-width=".8"/>
+              <text x="7" y="13" text-anchor="middle" font-size="6" fill="#3a5272" font-family="Space Mono">5</text>
+              <circle cx="23" cy="18" r="7" fill="none" stroke="#3a5272" stroke-width=".8"/>
+              <text x="23" y="8" text-anchor="middle" font-size="6" fill="#3a5272" font-family="Space Mono">20</text>
+              <circle cx="46" cy="12" r="13" fill="none" stroke="#3a5272" stroke-width=".8"/>
+              <text x="46" y="-3" text-anchor="middle" font-size="6" fill="#3a5272" font-family="Space Mono">60</text>
+            </svg>
+          </div>
+          <div class="bki"><svg width="11" height="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#00d990" opacity=".8"/></svg>Open &amp; operating</div>
+          <div class="bki"><svg width="11" height="11"><circle cx="5.5" cy="5.5" r="4" fill="none" stroke="#f5a623" stroke-width="1.4"/></svg>Licensed · not open</div>
+          <div class="bki"><svg width="11" height="11"><circle cx="5.5" cy="5.5" r="4" fill="#e03868" opacity=".12"/><circle cx="5.5" cy="5.5" r="4" fill="none" stroke="#e03868" stroke-width=".7" stroke-dasharray="2 1.5"/></svg>Application pending</div>
+        </div>
+        <div><div class="ps-t">Open · by Region</div><div id="rbars"></div></div>
+        <div>
+          <div class="ps-t">How to Use</div>
+          <div class="note-t">Click any county to drill into municipality-level opt-in/out territories. Voronoi tessellation from embedded centroid data.<br><br>Opt-out data: OCM official list, <strong style="color:var(--am)">last updated Nov 6, 2025</strong>. 711 municipalities opted out of retail dispensaries across 56 counties. ★ confirmed, ~ estimated.</div>
+        </div>
+      </div>
+      <div id="pv-drill">
+        <div class="dsb">
+          <div class="ps-t" id="drill-region"></div>
+          <div class="dsb-n" id="drill-cname"></div>
+          <div class="dsb-l">County</div>
+        </div>
+        <div class="dsb" id="drill-counts"></div>
+        <div id="drill-summary"></div>
+        <div id="drill-list"></div>
+        <div>
+          <div class="ps-t">Legend</div>
+          <div class="bki" style="margin-bottom:5px"><svg width="10" height="10"><rect width="10" height="10" rx="1.5" fill="#1a6635"/></svg>Opted in (allows dispensaries)</div>
+          <div class="bki"><svg width="10" height="10"><rect width="10" height="10" rx="1.5" fill="#7a1a1a"/></svg>Opted out (banned dispensaries)</div>
+          <div style="margin-top:7px" class="note-t">★ = confirmed OCM / Rockefeller<br>~ = estimated via county rate<br><br>Territories are Voronoi-approximated from town/city centroids. Village boundaries not shown.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!-- ═══ TAB: MACRO ═══ -->
-<div id="tab-macro" class="tab-content active">
-<div class="stats">
-<div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">Non-Flower Share</div><div class="stat-val">55%</div><div class="stat-sub" style="color:var(--rose)">As of Nov 2024 (OCM)</div></div>
-<div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">Pre-Roll Surge</div><div class="stat-val">19%</div><div class="stat-sub" style="color:var(--rose)">Feb '26; was 12% mid-'24</div></div>
-<div class="stat" style="border-top:2px solid var(--accent)"><div class="stat-label">Beverage YoY</div><div class="stat-val">+88%</div><div class="stat-sub" style="color:var(--accent)">Fastest-growing category</div></div>
-<div class="stat" style="border-top:2px solid var(--blue)"><div class="stat-label">500+ Brands</div><div class="stat-val">513</div><div class="stat-sub" style="color:var(--blue)">Across 8 major categories</div></div>
-</div>
-<div class="card"><div class="card-title">Revenue Share by Category (Gross Retail $) - Demographic-Weighted Model</div><div class="card-sub">% of total gross retail revenue (shelf price at POS). Actual Dec 2023-Feb 2026 (OCM/Headset). Projected 2027P-2028P via demographic-weighted model. Hover for sources.</div><div class="chart-wrap"><canvas id="macroRevChart" height="380"></canvas></div></div>
-<div class="card"><div class="card-title">Unit Share by Category Using Revenue-to-Unit Conversion</div><div class="card-sub">% of total units sold. Derived from revenue share / avg price per unit per category. Low-price categories gain share vs revenue view. Hover for sources.</div><div class="chart-wrap"><canvas id="macroUnitChart" height="380"></canvas></div></div>
-<div class="card"><div class="note-box">The gap between revenue and unit share reveals which categories punch above or below their weight. Vaporizers command ~25% of revenue but only ~13% of units because avg price ($52-$65) is the highest of any mainstream format. Edibles are the inverse: ~14.5% of revenue but ~21% of units because gummies ($20-$27) and cans ($5) have the lowest per-transaction cost. Pre-rolls are roughly proportional across both measures. Sources: OCM 2023 Annual Report; OCM 2024 Market Report; Headset; OCM 2025 Annual Report; Cannabis Benchmarks</div></div>
-<div class="card"><div class="card-title">Model Input: Generational Share of Total Market Spend</div><div class="card-sub">Each generation's % of total cannabis spend. Gen Z grows from ~15% (2023) to 33% (2028P). Hover for sources.</div><div class="chart-wrap"><canvas id="genWeightChart" height="320"></canvas></div></div>
-<div class="card"><div class="card-title">Model Input: Annual Intra-Cohort Preference Drift (pp/yr)</div><div class="card-sub">How each generation's category preferences shift independent of demographic weight. Derived from BRFSS 2018-2023, Headset YoY, BDSA CAGRs.</div>
-<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;font-family:monospace"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px 10px;color:var(--text)">Category</th><th style="text-align:center;padding:8px 10px;color:var(--violet)">Gen Z</th><th style="text-align:center;padding:8px 10px;color:var(--blue)">Millennial</th><th style="text-align:center;padding:8px 10px;color:var(--amber)">Gen X</th><th style="text-align:center;padding:8px 10px;color:var(--emerald)">Boomer</th><th style="text-align:left;padding:8px 10px;color:var(--muted);font-size:9px">Rationale</th></tr></thead>
-<tbody>
-<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Flower</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-2.0</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-1.5</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-1.0</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-1.0</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Secular decline; fastest among Gen Z (Headset CA trend)</td></tr>
-<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Vaporizer</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-0.5</td><td style="text-align:center;padding:6px 10px;color:var(--rose)">-0.5</td><td style="text-align:center;padding:6px 10px;color:var(--muted)">0.0</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Growing only for Gen Z; Boomer vape sales -9% YoY (CBT)</td></tr>
-<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Pre-Roll</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+1.0</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+1.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+1.0</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Fastest-growing; Millennials = 45% of $3B market (Flowhub); BDSA 10% CAGR</td></tr>
-<tr style="border-bottom:1px solid var(--grid)"><td style="padding:6px 10px;color:var(--text);font-weight:600">Edibles</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="text-align:center;padding:6px 10px;color:var(--accent)">+0.5</td><td style="padding:6px 10px;color:var(--muted);font-size:9px">Steady all cohorts; BRFSS eating doubled 7% to 12.3% (2018-22)</td></tr>
-</tbody></table></div></div>
-</div>
-
-<!-- ═══ TAB: MICRO ═══ -->
-<div id="tab-micro" class="tab-content">
-<div class="micro-tabs">
-<button class="micro-btn active" onclick="switchMicro('preroll')">Pre-Rolls</button>
-<button class="micro-btn" onclick="switchMicro('edible')">Edibles</button>
-<button class="micro-btn" onclick="switchMicro('vape')">Vaporizers</button>
-<button class="micro-btn" onclick="switchMicro('conc')">Concentrates</button>
-<button class="micro-btn" onclick="switchMicro('flower')">Flower</button>
-</div>
-<div id="micro-preroll" class="micro-panel" style="display:block">
-<div class="card"><div class="card-title">Pre-Roll Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of pre-roll category revenue. Actual 2023-2024 (OCM). Projected 2025E-2028P. Hover for sources.</div><div class="chart-wrap"><canvas id="prerollLineChart" height="340"></canvas></div></div>
-<div class="card"><div class="card-title">Current Snapshot: Pre-Roll Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 17-21. Hover for avg price &amp; source.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="prerollPie" width="220" height="220"></canvas></div><div class="pie-legend" id="prerollPieLegend"></div></div></div>
-</div>
-<div id="micro-edible" class="micro-panel" style="display:none">
-<div class="card"><div class="card-title">Edibles Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of edibles category revenue. Gummies eroding share to beverages. Hover for sources.</div><div class="chart-wrap"><canvas id="edibleLineChart" height="340"></canvas></div></div>
-<div class="card"><div class="card-title">Current Snapshot: Edibles Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 22-24. Hover for avg price &amp; source.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="ediblePie" width="220" height="220"></canvas></div><div class="pie-legend" id="ediblePieLegend"></div></div></div>
-</div>
-<div id="micro-vape" class="micro-panel" style="display:none">
-<div class="card"><div class="card-title">Vaporizer Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of vape sales by format/size. Disposable overlaps size categories. Hover for sources.</div><div class="chart-wrap"><canvas id="vapeLineChart" height="340"></canvas></div></div>
-<div class="card"><div class="card-title">Current Snapshot: Vaporizer Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 25-27.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="vapePie" width="220" height="220"></canvas></div><div class="pie-legend" id="vapePieLegend"></div></div></div>
-</div>
-<div id="micro-conc" class="micro-panel" style="display:none">
-<div class="card"><div class="card-title">Concentrate Sub-Category Evolution (2023-2028P)</div><div class="card-sub">% of concentrate category revenue. Infused products = 76%+ of category. Hover for sources.</div><div class="chart-wrap"><canvas id="concLineChart" height="340"></canvas></div></div>
-<div class="card"><div class="card-title">Current Snapshot: Concentrate Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Figs 19-20. Hover for avg price &amp; source.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="concPie" width="220" height="220"></canvas></div><div class="pie-legend" id="concPieLegend"></div></div></div>
-</div>
-<div id="micro-flower" class="micro-panel" style="display:none">
-<div class="card"><div class="card-title">Flower Package Size Evolution (2023-2028P)</div><div class="card-sub">% of flower sales by weight. 3.5g eroding as ounce value-packs grow. Hover for sources.</div><div class="chart-wrap"><canvas id="flowerLineChart" height="340"></canvas></div></div>
-<div class="card"><div class="card-title">Current Snapshot: Flower Package Mix (2024 Actual)</div><div class="card-sub">OCM 2024 Market Report, Fig 14 &amp; Table 2.</div><div class="pie-wrap"><div style="flex:0 0 220px"><canvas id="flowerPie" width="220" height="220"></canvas></div><div class="pie-legend" id="flowerPieLegend"></div></div></div>
-</div>
-</div>
-
-<!-- ═══ TAB: DEMOGRAPHICS ═══ -->
-<div id="tab-demo" class="tab-content">
-<div class="stats">
-<div class="stat" style="border-top:2px solid var(--blue)"><div class="stat-label">NYS Adult Prevalence</div><div class="stat-val">14.7%</div><div class="stat-sub" style="color:var(--blue)">2023 BRFSS (past 30 days)</div></div>
-<div class="stat" style="border-top:2px solid var(--violet)"><div class="stat-label">Daily/Near Daily</div><div class="stat-val">6.7%</div><div class="stat-sub" style="color:var(--violet)">20+ days/month, 2023</div></div>
-<div class="stat" style="border-top:2px solid var(--accent)"><div class="stat-label">Est. Monthly Users</div><div class="stat-val">~2.2M</div><div class="stat-sub" style="color:var(--accent)">NYS adults 21+ (ACS 2022)</div></div>
-<div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">2028P Prevalence</div><div class="stat-val">~19%</div><div class="stat-sub" style="color:var(--rose)">Approaching CO/WA levels</div></div>
-</div>
-<div class="card"><div class="card-title">Cannabis Prevalence by Age Cohort (NYS, 2018-2028P)</div><div class="card-sub">Past-month consumption % by age group. BRFSS 2018-2023 actual. 2025E-2028P projected. Hover for source.</div><div class="chart-wrap"><canvas id="ageChart" height="380"></canvas></div></div>
-<div class="card"><div class="card-title">Prevalence by Sex &amp; Sexual Orientation/Gender Identity (NYS, 2018-2028P)</div><div class="card-sub">BRFSS 2018-2023 actual. 2025E-2028P projected. MRTA Report; OCM 2025 Annual Report, Table 29.</div><div class="chart-wrap"><canvas id="demoChart" height="320"></canvas></div></div>
-<div class="card"><div class="card-title">Prevalence by Race/Ethnicity (NYS, 2018-2028P)</div><div class="card-sub">BRFSS data via MRTA Report &amp; OCM 2025 Annual Report. Race-specific longitudinal data limited pre-2022.</div><div class="chart-wrap"><canvas id="raceChart" height="320"></canvas></div></div>
-<div class="card"><div class="card-title">Statewide Prevalence &amp; Daily Use Trend (NYS, 2018-2028P)</div><div class="card-sub">Current consumption (any past 30 days) vs daily/near-daily (20+ days/month). BRFSS 2018-2023 actual.</div><div class="chart-wrap"><canvas id="prevChart" height="280"></canvas></div></div>
-</div>
-
-<!-- ═══ TAB: GENERATIONAL ═══ -->
-<div id="tab-gen" class="tab-content">
-<div class="card"><div class="card-title">Category Spending by Generation (U.S., 2024-2025)</div><div class="card-sub">% of each generation's cannabis spending by category. Headset POS data via Flowhub, GreenState, Cannabis Business Times (2025-2026).</div><div class="chart-wrap"><canvas id="genSpendChart" height="340"></canvas></div></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px">
-<div class="card" style="border-top:2px solid var(--violet);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--violet);margin-bottom:8px">Gen Z (1997-2012)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--violet)">&#8250;</span> 38% spend on vapor pens - #1 category<br><span style="color:var(--violet)">&#8250;</span> 32.5% on flower - lowest of any gen<br><span style="color:var(--violet)">&#8250;</span> Fastest-growing cohort (+20% YoY)<br><span style="color:var(--violet)">&#8250;</span> 69% prefer cannabis to alcohol<br><span style="color:var(--violet)">&#8250;</span> 38% say today's cannabis is 'too strong'</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Headset via GreenState/Flowhub 2026; CBS News; New Frontier Data</div></div>
-<div class="card" style="border-top:2px solid var(--blue);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">Millennial (1981-1996)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--blue)">&#8250;</span> 40.1% spend on flower - still dominant<br><span style="color:var(--blue)">&#8250;</span> Top spenders: 45% of $3B pre-roll market<br><span style="color:var(--blue)">&#8250;</span> Peak earning years = highest total spend<br><span style="color:var(--blue)">&#8250;</span> Seek control, consistency, value<br><span style="color:var(--blue)">&#8250;</span> Wellness-oriented: anxiety, sleep, recovery</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Headset via Flowhub 2025; Hybrid Marketing 2025</div></div>
-<div class="card" style="border-top:2px solid var(--amber);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:8px">Gen X (1965-1980)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--amber)">&#8250;</span> 44% on flower - traditional preference<br><span style="color:var(--amber)">&#8250;</span> 89% consume weekly or more (highest freq)<br><span style="color:var(--amber)">&#8250;</span> Conservative approach from War on Drugs era<br><span style="color:var(--amber)">&#8250;</span> Prefer familiar formats over novelty<br><span style="color:var(--amber)">&#8250;</span> Growing adoption of edibles/topicals</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Sanctuary Wellness/Crescent Canna survey 2024</div></div>
-<div class="card" style="border-top:2px solid var(--emerald);padding:14px"><div style="font-size:12px;font-weight:700;color:var(--emerald);margin-bottom:8px">Baby Boomer (1946-1964)</div><div class="mono" style="font-size:9.5px;color:var(--muted);line-height:1.6"><span style="color:var(--emerald)">&#8250;</span> 50% spend on flower - highest flower share<br><span style="color:var(--emerald)">&#8250;</span> 14.4% on vapes - lowest vape share<br><span style="color:var(--emerald)">&#8250;</span> 65+ use surged 46% from 2021-2023<br><span style="color:var(--emerald)">&#8250;</span> Visit less often but spend more per visit<br><span style="color:var(--emerald)">&#8250;</span> Medical-oriented (17% edibles share)</div><div class="mono" style="font-size:8px;color:var(--accent);margin-top:6px">Sources: Headset via CBT 2026; NYU CDUHR; Flowhub</div></div>
-</div>
-</div>
-
-<!-- ═══ TAB: CONSUMPTION MODES ═══ -->
-<div id="tab-mode" class="tab-content">
-<div class="card"><div class="card-title">Usual Mode of Consumption Evolution (NYS)</div><div class="card-sub">BRFSS 2018-2022 actual. 2024E-2028P projected. MRTA Implementation Report, Fig 21; OCM 2025 Annual Report.</div><div class="chart-wrap"><canvas id="modeChart" height="340"></canvas></div></div>
-<div class="card"><div class="card-title">Consumption Reason: Medical vs Non-Medical (NYS)</div><div class="card-sub">BRFSS 2018-2022. MRTA Implementation Report, Fig 20.</div><div class="chart-wrap"><canvas id="reasonChart" height="260"></canvas></div></div>
-<div class="card"><div class="note-box">Smoking declined from 76.4% to 69.8% (2018-2022) and is projected to fall to ~55% by 2028 as edibles double from 7% to 22%. Post-legalization (2022): medical-only use dropped to 13.5% (from 19.2% peak in 2020) while non-medical-only rebounded to 52.1%. Multimodal consumption surged - 39% of users reported 2+ modes in 2022, up from 27% in 2021. (MRTA Implementation Report; OCM 2025 Annual Report)</div></div>
-</div>
-
-<!-- ═══ TAB: EFFECTS ═══ -->
-<div id="tab-effects" class="tab-content">
-<div class="card"><div class="card-title">Edible Effect Positioning - Radar Profile (NYS)</div><div class="card-sub">48% of edibles sold carry effect labels. OCM 2024 Market Report, Fig 33. Grouped thematically. Hover for sub-effects.</div><div class="chart-wrap" style="display:flex;justify-content:center"><canvas id="radarChart" width="420" height="420"></canvas></div></div>
-<div class="card"><div class="card-title">Effect Category Detail</div><div class="card-sub">Top sub-effects within each theme. OCM 2024 Market Report, Fig 33.</div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px" id="effectCards"></div></div>
-<div class="card"><div class="note-box">Sleep + Relaxation together account for 49% of effect-labeled edible sales - positioning cannabis as a wellness/self-care product rather than a recreational substance. This aligns with Gen Z and Millennial consumer behavior: New Frontier Data and BDSA report that anxiety relief, sleep improvement, and focus are leading reasons for consumption among younger adults. The emerging "Energy" segment (21%) signals growing daytime-use adoption. (OCM 2024 Market Report, Finding #8; New Frontier Data; BDSA)</div></div>
-</div>
-
-<div class="footer">
-<strong style="color:var(--text)">Primary Sources:</strong> NYS OCM 2025 Annual Report (Dec 2025) - NYS OCM 2024 Market Report (Jun 2025) - OCM 2023 Annual Report - MRTA Implementation Report (2024) - Headset POS Brand Export (Mar 2026) - Headset Market Data via Flowhub/GreenState/Cannabis Business Times (2025-2026) - NYS DOH BRFSS 2018-2023 - BDSA 2025 Cannabis Market Forecasts - Whitney Economics 2026 Cannabis Industry Report - New Frontier Data - MJBizDaily (Mar 2026) - SAMHSA NSDUH - Pew Research - Gallup - CDC YRBS 2021
-<br><br>
-<strong style="color:var(--text)">Methodology:</strong> Actual category share data from OCM reports and Headset POS tracking. Projected values (P) derived from a <strong style="color:var(--accent)">demographic-weighted model</strong>: Category_Share(t) = Sum[GenWeight(gen,t) x (BasePref(gen,cat) + Drift(gen,cat) x years)] across Gen Z, Millennial, Gen X, and Boomer cohorts. Three interacting forces modeled: (1) demographic weight shift (Gen Z 24% to 33% of total spend), (2) intra-cohort preference drift (BRFSS 2018-2023 mode trends, Headset category YoY), (3) compounding interaction effects.
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════
-// CHART.JS DEFAULTS
-// ═══════════════════════════════════════════════════════════
-Chart.defaults.color = '#7b8ba5';
-Chart.defaults.borderColor = '#162035';
-Chart.defaults.font.family = "'Courier New', monospace";
-Chart.defaults.font.size = 10;
-Chart.defaults.plugins.legend.display = false;
-Chart.defaults.animation.duration = 600;
+/* ── County data ─────────────────────────────────────────────────────── */
+const D={
+  "36001":{name:"Albany",       region:"Capital",       optOut:38,open:18,lic:6, pend:40 },
+  "36003":{name:"Allegany",     region:"Western NY",    optOut:100,open:1, lic:1, pend:5  },
+  "36005":{name:"Bronx",        region:"NYC",           optOut:0, open:32,lic:9, pend:72 },
+  "36007":{name:"Broome",       region:"Southern Tier", optOut:36,open:5, lic:2, pend:14 },
+  "36009":{name:"Cattaraugus",  region:"Western NY",    optOut:55,open:2, lic:1, pend:8  },
+  "36011":{name:"Cayuga",       region:"Finger Lakes",  optOut:84,open:3, lic:1, pend:8  },
+  "36013":{name:"Chautauqua",   region:"Western NY",    optOut:100,open:4, lic:2, pend:12 },
+  "36015":{name:"Chemung",      region:"Southern Tier", optOut:83,open:3, lic:1, pend:8  },
+  "36017":{name:"Chenango",     region:"Southern Tier", optOut:55,open:1, lic:1, pend:4  },
+  "36019":{name:"Clinton",      region:"North Country", optOut:14,open:3, lic:1, pend:8  },
+  "36021":{name:"Columbia",     region:"Mid-Hudson",    optOut:11,open:4, lic:2, pend:12 },
+  "36023":{name:"Cortland",     region:"Central NY",    optOut:44,open:2, lic:1, pend:5  },
+  "36025":{name:"Delaware",     region:"Southern Tier", optOut:53,open:2, lic:1, pend:6  },
+  "36027":{name:"Dutchess",     region:"Mid-Hudson",    optOut:71,open:10,lic:4, pend:25 },
+  "36029":{name:"Erie",         region:"Western NY",    optOut:69,open:28,lic:9, pend:65 },
+  "36031":{name:"Essex",        region:"North Country", optOut:47,open:1, lic:1, pend:4  },
+  "36033":{name:"Franklin",     region:"North Country", optOut:39,open:1, lic:1, pend:4  },
+  "36035":{name:"Fulton",       region:"Capital",       optOut:18,open:2, lic:1, pend:6  },
+  "36037":{name:"Genesee",      region:"Western NY",    optOut:77,open:2, lic:1, pend:6  },
+  "36039":{name:"Greene",       region:"Mid-Hudson",    optOut:64,open:3, lic:2, pend:8  },
+  "36041":{name:"Hamilton",     region:"North Country", optOut:60,open:0, lic:0, pend:2  },
+  "36043":{name:"Herkimer",     region:"Mohawk Valley", optOut:42,open:2, lic:1, pend:6  },
+  "36045":{name:"Jefferson",    region:"North Country", optOut:100,open:4, lic:2, pend:10 },
+  "36047":{name:"Kings",        region:"NYC",           optOut:0, open:68,lic:18,pend:125},
+  "36049":{name:"Lewis",        region:"North Country", optOut:100,open:1, lic:0, pend:3  },
+  "36051":{name:"Livingston",   region:"Finger Lakes",  optOut:24,open:2, lic:1, pend:7  },
+  "36053":{name:"Madison",      region:"Central NY",    optOut:76,open:2, lic:1, pend:6  },
+  "36055":{name:"Monroe",       region:"Finger Lakes",  optOut:80,open:20,lic:6, pend:48 },
+  "36057":{name:"Montgomery",   region:"Capital",       optOut:38,open:2, lic:1, pend:6  },
+  "36059":{name:"Nassau",       region:"Long Island",   optOut:100,open:5, lic:8, pend:45 },
+  "36061":{name:"New York",     region:"NYC",           optOut:0, open:75,lic:22,pend:155},
+  "36063":{name:"Niagara",      region:"Western NY",    optOut:50,open:6, lic:2, pend:18 },
+  "36065":{name:"Oneida",       region:"Mohawk Valley", optOut:46,open:8, lic:3, pend:20 },
+  "36067":{name:"Onondaga",     region:"Central NY",    optOut:76,open:20,lic:6, pend:45 },
+  "36069":{name:"Ontario",      region:"Finger Lakes",  optOut:75,open:4, lic:2, pend:12 },
+  "36071":{name:"Orange",       region:"Mid-Hudson",    optOut:100,open:8, lic:4, pend:30 },
+  "36073":{name:"Orleans",      region:"Western NY",    optOut:92,open:1, lic:0, pend:4  },
+  "36075":{name:"Oswego",       region:"Central NY",    optOut:61,open:3, lic:1, pend:8  },
+  "36077":{name:"Otsego",       region:"Southern Tier", optOut:20,open:2, lic:1, pend:6  },
+  "36079":{name:"Putnam",       region:"Mid-Hudson",    optOut:100,open:2, lic:1, pend:10 },
+  "36081":{name:"Queens",       region:"NYC",           optOut:0, open:48,lic:12,pend:95 },
+  "36083":{name:"Rensselaer",   region:"Capital",       optOut:20,open:6, lic:3, pend:18 },
+  "36085":{name:"Richmond",     region:"NYC",           optOut:0, open:15,lic:5, pend:32 },
+  "36087":{name:"Rockland",     region:"Mid-Hudson",    optOut:100,open:4, lic:3, pend:20 },
+  "36089":{name:"St. Lawrence", region:"North Country", optOut:27,open:3, lic:1, pend:8  },
+  "36091":{name:"Saratoga",     region:"Capital",       optOut:63,open:8, lic:3, pend:22 },
+  "36093":{name:"Schenectady",  region:"Capital",       optOut:43,open:9, lic:3, pend:22 },
+  "36095":{name:"Schoharie",    region:"Capital",       optOut:29,open:1, lic:1, pend:4  },
+  "36097":{name:"Schuyler",     region:"Finger Lakes",  optOut:50,open:1, lic:0, pend:3  },
+  "36099":{name:"Seneca",       region:"Finger Lakes",  optOut:50,open:1, lic:1, pend:4  },
+  "36101":{name:"Steuben",      region:"Southern Tier", optOut:100,open:2, lic:1, pend:8  },
+  "36103":{name:"Suffolk",      region:"Long Island",   optOut:100,open:8, lic:12,pend:62 },
+  "36105":{name:"Sullivan",     region:"Mid-Hudson",    optOut:31,open:5, lic:2, pend:15 },
+  "36107":{name:"Tioga",        region:"Southern Tier", optOut:70,open:1, lic:1, pend:4  },
+  "36109":{name:"Tompkins",     region:"Central NY",    optOut:50,open:5, lic:2, pend:12 },
+  "36111":{name:"Ulster",       region:"Mid-Hudson",    optOut:24,open:14,lic:5, pend:30 },
+  "36113":{name:"Warren",       region:"Capital",       optOut:42,open:4, lic:2, pend:10 },
+  "36115":{name:"Washington",   region:"Capital",       optOut:11,open:2, lic:1, pend:8  },
+  "36117":{name:"Wayne",        region:"Finger Lakes",  optOut:0,open:2, lic:1, pend:6  },
+  "36119":{name:"Westchester",  region:"Mid-Hudson",    optOut:100,open:20,lic:7, pend:58 },
+  "36121":{name:"Wyoming",      region:"Western NY",    optOut:93,open:1, lic:0, pend:4  },
+  "36123":{name:"Yates",        region:"Finger Lakes",  optOut:45,open:1, lic:1, pend:4  }
+};
+/* ── Municipality centroids [name, lat, lon,
+    ["Altamont",42.7,-74.028,"V"],
+    ["Voorheesville",42.65,-73.93,"V"],
+    ["Belmont",42.222,-78.037,"V"],
+    ["Bolivar",42.067,-78.166,"V"],
+    ["Wellsville",42.122,-77.948,"V"],
+    ["Delevan",42.49,-78.48,"V"],
+    ["South Dayton",42.362,-79.052,"V"],
+    ["Gowanda",42.464,-78.931,"V"],
+    ["Fair Haven",43.34,-76.7,"V"],
+    ["Aurora",42.749,-76.706,"V"],
+    ["Port Byron",43.034,-76.623,"V"],
+    ["Union Springs",42.842,-76.692,"V"],
+    ["Weedsport",43.051,-76.545,"V"],
+    ["Moravia",42.712,-76.422,"V"],
+    ["Bemus Point",42.162,-79.393,"V"],
+    ["Brocton",42.389,-79.434,"V"],
+    ["Cassadaga",42.343,-79.322,"V"],
+    ["Celoron",42.098,-79.278,"V"],
+    ["Falconer",42.119,-79.199,"V"],
+    ["Lakewood",42.099,-79.323,"V"],
+    ["Mayville",42.252,-79.506,"V"],
+    ["Panama",42.067,-79.491,"V"],
+    ["Silver Creek",42.54,-79.166,"V"],
+    ["Sinclairville",42.267,-79.261,"V"],
+    ["Elmira Heights",42.121,-76.829,"V"],
+    ["Rouses Point",44.994,-73.364,"V"],
+    ["Marathon",42.441,-76.024,"V"],
+    ["Hobart",42.375,-74.674,"V"],
+    ["Sidney",42.315,-75.396,"V"],
+    ["Millbrook",41.785,-73.694,"V"],
+    ["Tivoli",42.053,-73.909,"V"],
+    ["Akron",43.022,-78.499,"V"],
+    ["Hamburg",42.716,-78.829,"V"],
+    ["Orchard Park",42.768,-78.743,"V"],
+    ["Williamsville",42.963,-78.737,"V"],
+    ["Gowanda",42.464,-78.931,"V"],
+    ["Malone",44.848,-74.298,"V"],
+    ["Dolgeville",43.098,-74.775,"V"],
+    ["Speculator",43.503,-74.357,"V"],
+    ["Cold Brook",43.257,-75.003,"V"],
+    ["Ilion",43.009,-75.038,"V"],
+    ["Middleville",43.139,-74.978,"V"],
+    ["Mohawk",43.003,-75.012,"V"],
+    ["Dolgeville",43.098,-74.775,"V"],
+    ["Alexandria Bay",44.337,-75.918,"V"],
+    ["Black River",44.005,-75.79,"V"],
+    ["Chaumont",44.068,-76.137,"V"],
+    ["Deferiet",44.03,-75.67,"V"],
+    ["Dexter",44.0,-76.047,"V"],
+    ["Castorland",43.889,-75.51,"V"],
+    ["Constableville",43.551,-75.441,"V"],
+    ["Copenhagen",43.893,-75.677,"V"],
+    ["Port Leyden",43.591,-75.338,"V"],
+    ["Nunda",42.578,-77.933,"V"],
+    ["Canastota",43.077,-75.75,"V"],
+    ["Chittenango",43.047,-75.867,"V"],
+    ["Munnsville",42.971,-75.591,"V"],
+    ["Wampsville",43.076,-75.708,"V"],
+    ["Churchville",43.101,-77.887,"V"],
+    ["Hilton",43.289,-77.79,"V"],
+    ["Scottsville",42.977,-77.75,"V"],
+    ["Fort Plain",42.93,-74.622,"V"],
+    ["Fultonville",42.953,-74.399,"V"],
+    ["Middleport",43.216,-78.479,"V"],
+    ["Camden",43.328,-75.746,"V"],
+    ["Clayville",42.972,-75.254,"V"],
+    ["Clinton",43.048,-75.378,"V"],
+    ["Oneida Castle",43.073,-75.58,"V"],
+    ["Baldwinsville",43.158,-76.33,"V"],
+    ["Jordan",43.065,-76.473,"V"],
+    ["Liverpool",43.106,-76.216,"V"],
+    ["Manlius",43.001,-75.982,"V"],
+    ["Marcellus",42.983,-76.341,"V"],
+    ["Minoa",43.072,-76.001,"V"],
+    ["Skaneateles",42.947,-76.43,"V"],
+    ["Solvay",43.06,-76.209,"V"],
+    ["Shortsville",42.962,-77.222,"V"],
+    ["Chester",41.363,-74.271,"V"],
+    ["Cornwall-on-Hudson",41.433,-74.012,"V"],
+    ["Florida",41.331,-74.354,"V"],
+    ["Greenwood Lake",41.224,-74.294,"V"],
+    ["Harriman",41.303,-74.147,"V"],
+    ["Highland Falls",41.369,-73.963,"V"],
+    ["Maybrook",41.491,-74.211,"V"],
+    ["Otisville",41.464,-74.538,"V"],
+    ["South Blooming Grove",41.376,-74.192,"V"],
+    ["Tuxedo Park",41.201,-74.188,"V"],
+    ["Unionville",41.321,-74.549,"V"],
+    ["Warwick",41.256,-74.358,"V"],
+    ["Washingtonville",41.431,-74.168,"V"],
+    ["Holley",43.226,-78.022,"V"],
+    ["Lyndonville",43.322,-78.388,"V"],
+    ["Central Square",43.282,-76.141,"V"],
+    ["Cleveland",43.241,-75.898,"V"],
+    ["Lacona",43.641,-76.062,"V"],
+    ["Gilbertsville",42.467,-75.323,"V"],
+    ["Brewster",41.396,-73.616,"V"],
+    ["Nelsonville",41.435,-73.953,"V"],
+    ["Valley Falls",42.898,-73.559,"V"],
+    ["Grand View-on-Hudson",41.095,-73.929,"V"],
+    ["Kaser",41.118,-74.071,"V"],
+    ["New Hempstead",41.134,-74.044,"V"],
+    ["New Square",41.143,-74.023,"V"],
+    ["Pomona",41.175,-74.051,"V"],
+    ["Sloatsburg",41.154,-74.197,"V"],
+    ["Suffern",41.115,-74.15,"V"],
+    ["West Haverstraw",41.21,-73.985,"V"],
+    ["Heuvelton",44.62,-75.407,"V"],
+    ["Victory",43.092,-73.589,"V"],
+    ["Waterford",42.793,-73.68,"V"],
+    ["Burdett",42.415,-76.845,"V"],
+    ["Montour Falls",42.349,-76.841,"V"],
+    ["Odessa",42.337,-76.784,"V"],
+    ["Waterloo",42.903,-76.864,"V"],
+    ["Arkport",42.391,-77.696,"V"],
+    ["Hammondsport",42.41,-77.22,"V"],
+    ["North Hornell",42.352,-77.657,"V"],
+    ["Riverside",42.147,-77.091,"V"],
+    ["South Corning",42.128,-77.055,"V"],
+    ["Wayland",42.569,-77.59,"V"],
+    ["Nichols",42.022,-76.363,"V"],
+    ["Dryden",42.488,-76.296,"V"],
+    ["Freeville",42.511,-76.343,"V"],
+    ["Lake George",43.424,-73.713,"V"],
+    ["Ardsley",41.006,-73.839,"V"],
+    ["Briarcliff Manor",41.143,-73.827,"V"],
+    ["Bronxville",40.939,-73.831,"V"],
+    ["Buchanan",41.261,-73.94,"V"],
+    ["Dobbs Ferry",41.011,-73.877,"V"],
+    ["Elmsford",41.054,-73.82,"V"],
+    ["Irvington",41.038,-73.868,"V"],
+    ["Larchmont",40.928,-73.751,"V"],
+    ["Pelham",40.909,-73.805,"V"],
+    ["Pelham Manor",40.897,-73.801,"V"],
+    ["Pleasantville",41.133,-73.792,"V"],
+    ["Port Chester",40.988,-73.665,"V"],
+    ["Rye Brook",40.969,-73.683,"V"],
+    ["Tuckahoe",40.951,-73.826,"V"],
+    ["Silver Springs",42.661,-78.09,"V"],
+    ["Wyoming",42.832,-78.093,"V"],
+    ["Dresden",42.688,-76.958,"V"]] ──────────────────────────
+   Source: Census county subdivision layer, confirmed OCM/Rockefeller
+   opt-out status overlaid. All 62 NYS counties. ─────────────────────*/
+const TOWNS={
+"36001":[["Albany",42.652,-73.757],["Cohoes",42.773,-73.700],["Watervliet",42.729,-73.701],["Green Island",42.744,-73.691],["Berne",42.604,-74.129],["Bethlehem",42.509,-73.832],["Coeymans",42.463,-73.792],["Colonie",42.728,-73.827],["Guilderland",42.687,-73.974],["Knox",42.658,-74.092],["New Scotland",42.587,-73.954],["Rensselaerville",42.526,-74.151],["Westerlo",42.535,-73.989],
+    ["Altamont",42.7,-74.028,"V"],
+    ["Voorheesville",42.65,-73.93,"V"]],
+"36003":[["Wellsville",42.121,-77.948],["Cuba",42.217,-78.276],["Bolivar",42.069,-78.166],["Angelica",42.315,-78.018],["Belfast",42.332,-78.105],["Rushford",42.387,-78.249],["Friendship",42.203,-78.139],["Amity",42.236,-77.972],["Andover",42.161,-77.794],["Scio",42.164,-78.080],["Alfred",42.255,-77.789],["Genesee",42.122,-78.168],["Grove",42.335,-78.234],["Hume",42.468,-78.163],["Willing",42.043,-77.899],["Wirt",42.080,-77.996],
+    ["Belmont",42.222,-78.037,"V"],
+    ["Bolivar",42.067,-78.166,"V"],
+    ["Wellsville",42.122,-77.948,"V"]],
+"36005":[["Bronx",40.845,-73.865]],
+"36007":[["Binghamton",42.098,-75.918],["Johnson City",42.114,-75.963],["Endicott",42.098,-76.069],["Vestal",42.078,-76.037],["Union",42.083,-75.996],["Windsor",42.083,-75.618],["Kirkwood",42.062,-75.800],["Conklin",42.026,-75.803],["Colesville",42.175,-75.671],["Barker",42.252,-75.793],["Lisle",42.354,-75.911],["Triangle",42.292,-75.946],["Nanticoke",42.214,-76.004],["Maine",42.239,-75.931],["Sanford",42.009,-75.579]],
+"36009":[["Olean",42.077,-78.429],["Salamanca",42.157,-78.714],["Little Valley",42.252,-78.796],["Ellicottville",42.278,-78.668],["Franklinville",42.337,-78.454],["Gowanda",42.463,-78.932],["Hinsdale",42.173,-78.391],["Randolph",42.164,-78.972],["Allegany",42.091,-78.491],["Ashford",42.376,-78.739],["Carrollton",42.056,-78.675],["Cattaraugus",42.330,-78.869],["Coldspring",42.042,-79.003],["Dayton",42.223,-79.015],["East Otto",42.276,-78.748],["Farmersville",42.420,-78.322],["Freedom",42.478,-78.323],["Humphrey",42.160,-78.547],["Leon",42.281,-79.015],["Lyndon",42.408,-78.430],["Machias",42.402,-78.506],["Mansfield",42.060,-78.518],["Napoli",42.228,-79.056],["New Albion",42.248,-78.868],["Otto",42.343,-79.014],["Perrysburg",42.450,-79.001],["Persia",42.469,-79.100],["Farmersville",42.420,-78.321],["Yorkshire",42.532,-78.481],
+    ["Delevan",42.49,-78.48,"V"],
+    ["South Dayton",42.362,-79.052,"V"],
+    ["Gowanda",42.464,-78.931,"V"]],
+"36011":[["Auburn",42.931,-76.566],["Aurelius",42.908,-76.633],["Brutus",43.068,-76.693],["Cato",43.167,-76.576],["Conquest",43.123,-76.708],["Fleming",42.845,-76.587],["Genoa",42.672,-76.535],["Ira",43.162,-76.576],["Ledyard",42.742,-76.633],["Locke",42.653,-76.431],["Mentz",43.060,-76.757],["Moravia",42.709,-76.423],["Niles",42.779,-76.485],["Owasco",42.854,-76.540],["Scipio",42.761,-76.600],["Sempronius",42.725,-76.426],["Sennett",42.904,-76.486],["Springport",42.953,-76.644],["Sterling",43.351,-76.656],["Summerhill",42.692,-76.377],["Throop",42.925,-76.544],["Union Springs",42.842,-76.692],["Venice",42.669,-76.550],["Victory",43.076,-76.714],["Weedsport",43.047,-76.556],
+    ["Fair Haven",43.34,-76.7,"V"],
+    ["Aurora",42.749,-76.706,"V"],
+    ["Port Byron",43.034,-76.623,"V"],
+    ["Union Springs",42.842,-76.692,"V"],
+    ["Weedsport",43.051,-76.545,"V"],
+    ["Moravia",42.712,-76.422,"V"]],
+"36013":[["Jamestown",42.097,-79.235],["Dunkirk",42.478,-79.332],["Fredonia",42.440,-79.331],["Bemus Point",42.162,-79.393],["Busti",42.075,-79.294],["Carroll",42.287,-79.126],["Charlotte",42.334,-79.430],["Chautauqua",42.210,-79.464],["Cherry Creek",42.296,-79.101],["Clymer",42.024,-79.613],["Ellery",42.237,-79.386],["Ellington",42.227,-79.101],["Ellicott",42.097,-79.149],["French Creek",42.077,-79.656],["Gerry",42.215,-79.184],["Hanover",42.544,-79.180],["Harmony",42.062,-79.406],["Kiantone",42.069,-79.235],["Mina",42.377,-79.517],["Muscatine",42.164,-79.500],["North Harmony",42.122,-79.442],["Poland",42.181,-79.420],["Pomfret",42.412,-79.320],["Portland",42.522,-79.467],["Ripley",42.263,-79.704],["Sherman",42.163,-79.592],["Stockton",42.319,-79.374],["Villenova",42.390,-79.135],["Westfield",42.322,-79.576],
+    ["Bemus Point",42.162,-79.393,"V"],
+    ["Brocton",42.389,-79.434,"V"],
+    ["Cassadaga",42.343,-79.322,"V"],
+    ["Celoron",42.098,-79.278,"V"],
+    ["Falconer",42.119,-79.199,"V"],
+    ["Lakewood",42.099,-79.323,"V"],
+    ["Mayville",42.252,-79.506,"V"],
+    ["Panama",42.067,-79.491,"V"],
+    ["Silver Creek",42.54,-79.166,"V"],
+    ["Sinclairville",42.267,-79.261,"V"]],
+"36015":[["Elmira",42.089,-76.807],["Elmira Heights",42.120,-76.829],["Horseheads",42.169,-76.822],["Ashland",42.156,-76.629],["Baldwin",42.103,-76.984],["Big Flats",42.141,-76.931],["Catlin",42.169,-76.939],["Chemung",42.002,-76.653],["Erin",42.106,-76.742],["Southport",42.032,-76.831],["Van Etten",42.214,-76.592],["Veteran",42.092,-76.906],
+    ["Elmira Heights",42.121,-76.829,"V"]],
+"36017":[["Norwich",42.532,-75.523],["Oxford",42.442,-75.594],["Greene",42.330,-75.768],["Sherburne",42.679,-75.499],["New Berlin",42.622,-75.332],["Bainbridge",42.297,-75.481],["Afton",42.226,-75.529],["Columbus",42.503,-75.352],["Coventry",42.384,-75.704],["German",42.442,-75.424],["Guilford",42.407,-75.468],["Lincklaen",42.642,-75.806],["McDonough",42.562,-75.734],["Otselic",42.682,-75.721],["Pharsalia",42.552,-75.797],["Pitcher",42.612,-75.889],["Plymouth",42.662,-75.606],["Preston",42.502,-75.674],["Smyrna",42.692,-75.621],["Smithville",42.377,-75.864]],
+"36019":[["Plattsburgh",44.699,-73.452],["Altona",44.888,-73.652],["Ausable",44.538,-73.727],["Beekmantown",44.776,-73.577],["Black Brook",44.541,-74.002],["Champlain",44.988,-73.441],["Chazy",44.881,-73.435],["Clinton",44.868,-73.652],["Ellenburg",44.888,-73.852],["Mooers",44.968,-73.577],["Peru",44.578,-73.527],["Plattsburgh town",44.699,-73.602],["Saranac",44.638,-73.777],["Schuyler Falls",44.728,-73.577],
+    ["Rouses Point",44.994,-73.364,"V"]],
+"36021":[["Hudson",42.252,-73.792],["Ancram",42.052,-73.662],["Austerlitz",42.282,-73.461],["Canaan",42.392,-73.461],["Chatham",42.362,-73.596],["Claverack",42.202,-73.732],["Clermont",42.082,-73.922],["Copake",42.112,-73.562],["Gallatin",42.062,-73.552],["Germantown",42.142,-73.882],["Ghent",42.312,-73.622],["Greenport",42.282,-73.792],["Hillsdale",42.182,-73.542],["Kinderhook",42.392,-73.702],["Livingston",42.092,-73.812],["New Lebanon",42.462,-73.401],["Stockport",42.242,-73.712],["Stuyvesant",42.372,-73.752],["Taghkanic",42.162,-73.642]],
+"36023":[["Cortland",42.600,-76.180],["Homer",42.642,-76.181],["McGraw",42.593,-76.090],["Marathon",42.443,-76.023],["Cincinnatus",42.543,-75.923],["Cuyler",42.723,-75.993],["Freetown",42.503,-75.950],["Harford",42.413,-76.133],["Lapeer",42.643,-75.913],["Preble",42.733,-76.113],["Scott",42.583,-76.013],["Solon",42.523,-76.090],["Taylor",42.563,-75.993],["Truxton",42.713,-75.943],["Virgil",42.543,-76.080],["Willett",42.463,-75.853],
+    ["Marathon",42.441,-76.024,"V"]],
+"36025":[["Delhi",42.278,-74.915],["Walton",42.171,-75.131],["Sidney",42.314,-75.397],["Stamford",42.401,-74.608],["Margaretville",42.146,-74.652],["Bovina",42.236,-74.722],["Colchester",42.086,-74.962],["Davenport",42.426,-74.892],["Deposit",42.061,-75.419],["Franklin",42.336,-74.992],["Hamden",42.196,-74.942],["Hancock",41.946,-75.279],["Harpersfield",42.436,-74.682],["Kortright",42.386,-74.752],["Masonville",42.171,-75.322],["Meredith",42.346,-74.972],["Middletown",42.226,-74.852],["Roxbury",42.301,-74.562],["Tompkins",42.516,-75.002],
+    ["Hobart",42.375,-74.674,"V"],
+    ["Sidney",42.315,-75.396,"V"]],
+"36027":[["Poughkeepsie",41.700,-73.921],["Beacon",41.504,-73.984],["Amenia",41.849,-73.556],["Beekman",41.599,-73.696],["Clinton",41.869,-73.726],["Dover",41.749,-73.556],["East Fishkill",41.554,-73.806],["Fishkill",41.534,-73.896],["Hyde Park",41.784,-73.926],["La Grange",41.674,-73.836],["Milan",41.974,-73.746],["North East",41.964,-73.556],["Pawling",41.564,-73.606],["Pine Plains",41.984,-73.676],["Pleasant Valley",41.754,-73.806],["Red Hook",42.014,-73.876],["Rhinebeck",41.924,-73.906],["Stanford",41.884,-73.706],["Union Vale",41.674,-73.696],["Wappinger",41.594,-73.906],["Washington",41.714,-73.736],
+    ["Millbrook",41.785,-73.694,"V"],
+    ["Tivoli",42.053,-73.909,"V"]],
+"36029":[["Buffalo",42.886,-78.878],["Lackawanna",42.825,-78.827],["Tonawanda city",43.020,-78.880],["Amherst",42.987,-78.800],["Aurora",42.722,-78.650],["Boston",42.622,-78.731],["Brant",42.567,-79.013],["Cheektowaga",42.892,-78.754],["Clarence",42.987,-78.590],["Colden",42.667,-78.700],["Collins",42.542,-78.860],["Concord",42.517,-78.681],["Eden",42.652,-78.890],["Elma",42.827,-78.640],["Evans",42.592,-79.000],["Grand Island",43.027,-78.970],["Hamburg",42.717,-78.830],["Holland",42.637,-78.540],["Lancaster",42.902,-78.670],["Marilla",42.857,-78.530],["Newstead",43.017,-78.480],["North Collins",42.597,-78.940],["Orchard Park",42.767,-78.740],["Sardinia",42.537,-78.590],["Wales",42.807,-78.500],["West Seneca",42.847,-78.750],
+    ["Akron",43.022,-78.499,"V"],
+    ["Hamburg",42.716,-78.829,"V"],
+    ["Orchard Park",42.768,-78.743,"V"],
+    ["Williamsville",42.963,-78.737,"V"],
+    ["Gowanda",42.464,-78.931,"V"]],
+"36031":[["Elizabethtown",44.208,-73.597],["Ticonderoga",43.844,-73.429],["Crown Point",43.944,-73.459],["Essex",44.344,-73.359],["Jay",44.394,-73.739],["Keene",44.204,-73.709],["Lewis",44.314,-73.549],["Minerva",43.864,-74.009],["Moriah",44.074,-73.529],["Newcomb",43.974,-74.169],["North Elba",44.239,-73.979],["North Hudson",43.904,-73.779],["Schroon",43.834,-73.769],["St. Armand",44.394,-74.079],["Westport",44.174,-73.449],["Willsboro",44.364,-73.389],["Wilmington",44.394,-73.819]],
+"36033":[["Malone",44.848,-74.297],["Bombay",44.948,-74.567],["Brandon",44.408,-74.427],["Brighton",44.468,-74.207],["Burke",44.918,-74.187],["Chateaugay",44.928,-74.077],["Constable",44.928,-74.307],["Dickinson",44.788,-74.547],["Duane",44.588,-74.387],["Fort Covington",44.998,-74.497],["Harrietstown",44.338,-74.207],["Hopkinton",44.488,-74.647],["Lawrence",44.938,-74.707],["Moira",44.908,-74.567],["Piercefield",44.228,-74.557],["Santa Clara",44.458,-74.487],["Waverly",44.838,-74.567],["Westville",44.898,-74.367],
+    ["Malone",44.848,-74.298,"V"]],
+"36035":[["Gloversville",43.053,-74.343],["Johnstown",43.006,-74.368],["Bleecker",43.098,-74.388],["Broadalbin",43.058,-74.208],["Caroga",43.128,-74.498],["Ephratah",43.008,-74.498],["Mayfield",43.108,-74.278],["Northampton",43.098,-74.148],["Oppenheim",43.188,-74.598],["Perth",43.028,-74.218],["Stratford",43.178,-74.528],
+    ["Dolgeville",43.098,-74.775,"V"]],
+"36037":[["Batavia",43.000,-78.187],["Le Roy",42.980,-77.987],["Alabama",43.080,-78.387],["Alexander",42.910,-78.257],["Bergen",43.090,-77.927],["Bethany",42.900,-78.127],["Byron",43.080,-78.067],["Darien",42.890,-78.477],["Elba",43.070,-78.187],["Oakfield",43.070,-78.267],["Pavilion",42.890,-77.927],["Pembroke",43.000,-78.407],["Stafford",43.000,-78.067]],
+"36039":[["Catskill",42.217,-73.864],["Athens",42.277,-73.814],["Cairo",42.297,-74.004],["Coxsackie",42.357,-73.814],["Ashland",42.287,-74.254],["Durham",42.387,-74.144],["Greenville",42.407,-74.004],["Halcott",42.177,-74.424],["Hunter",42.217,-74.214],["Jewett",42.237,-74.314],["Lexington",42.207,-74.364],["New Baltimore",42.407,-73.784],["Prattsville",42.327,-74.454],["Windham",42.317,-74.244]],
+"36041":[["Speculator",43.503,-74.357],["Indian Lake",43.783,-74.267],["Arietta",43.573,-74.617],["Benson",43.353,-74.507],["Hope",43.373,-74.287],["Inlet",43.753,-74.787],["Lake Pleasant",43.473,-74.387],["Long Lake",43.983,-74.417],["Morehouse",43.413,-74.767],["Wells",43.423,-74.277],
+    ["Speculator",43.503,-74.357,"V"]],
+"36043":[["Herkimer",43.026,-74.987],["Little Falls",43.046,-74.857],["Ilion",43.006,-75.037],["Mohawk",43.006,-75.017],["Dolgeville",43.106,-74.777],["Frankfort",43.036,-75.077],["German Flatts",43.026,-74.987],["Litchfield",43.076,-74.867],["Manheim",43.086,-74.797],["Newport",43.186,-74.927],["Norway",43.126,-74.917],["Ohio",43.436,-74.967],["Russia",43.236,-74.947],["Salisbury",43.176,-74.787],["Schuyler",43.016,-75.017],["Stark",43.066,-74.727],["Warren",43.036,-75.107],["Webb",43.786,-74.997],["Winfield",42.986,-75.067],
+    ["Cold Brook",43.257,-75.003,"V"],
+    ["Ilion",43.009,-75.038,"V"],
+    ["Middleville",43.139,-74.978,"V"],
+    ["Mohawk",43.003,-75.012,"V"],
+    ["Dolgeville",43.098,-74.775,"V"]],
+"36045":[["Watertown",43.974,-75.910],["Adams",43.834,-76.020],["Alexandria",44.314,-75.920],["Antwerp",44.184,-75.610],["Cape Vincent",44.124,-76.340],["Champion",43.934,-75.690],["Clayton",44.244,-76.090],["Denmark",43.914,-75.560],["Ellisburg",43.744,-76.050],["Henderson",43.814,-76.200],["Hounsfield",43.954,-76.210],["LeRay",44.024,-75.750],["Lorraine",43.824,-75.680],["Lyme",44.094,-76.220],["Orleans",44.094,-75.800],["Pamelia",43.974,-75.880],["Philadelphia",44.174,-75.720],["Rodman",43.854,-75.920],["Rutland",43.934,-75.750],["Theresa",44.214,-75.790],["Wilna",44.044,-75.630],["Worth",43.864,-75.560],
+    ["Alexandria Bay",44.337,-75.918,"V"],
+    ["Black River",44.005,-75.79,"V"],
+    ["Chaumont",44.068,-76.137,"V"],
+    ["Deferiet",44.03,-75.67,"V"],
+    ["Dexter",44.0,-76.047,"V"]],
+"36047":[["Brooklyn",40.678,-73.944]],
+"36049":[["Lowville",43.786,-75.490],["Croghan",43.906,-75.390],["Lyons Falls",43.616,-75.370],["Diana",44.126,-75.280],["Greig",43.686,-75.350],["Harrisburg",43.516,-75.340],["Lewis",44.156,-75.480],["Leyden",43.556,-75.390],["Lyonsdale",43.666,-75.360],["Martinsburg",43.716,-75.440],["Montague",43.776,-75.530],["New Bremen",43.866,-75.440],["Osceola",43.586,-75.510],["Pinckney",43.656,-75.710],["Turin",43.626,-75.410],["Watson",43.756,-75.240],["West Turin",43.706,-75.360],
+    ["Castorland",43.889,-75.51,"V"],
+    ["Constableville",43.551,-75.441,"V"],
+    ["Copenhagen",43.893,-75.677,"V"],
+    ["Port Leyden",43.591,-75.338,"V"]],
+"36051":[["Geneseo",42.796,-77.817],["Avon",42.906,-77.747],["Caledonia",42.976,-77.857],["Conesus",42.696,-77.677],["Groveland",42.676,-77.767],["Leicester",42.776,-77.877],["Lima",42.916,-77.607],["Livonia",42.816,-77.667],["Mount Morris",42.726,-77.877],["North Dansville",42.556,-77.697],["Nunda",42.576,-77.937],["Ossian",42.606,-77.977],["Portage",42.636,-77.997],["Sparta",42.686,-77.607],["Springwater",42.656,-77.597],["West Sparta",42.656,-77.817],["York",42.876,-77.867],
+    ["Nunda",42.578,-77.933,"V"]],
+"36053":[["Oneida",43.070,-75.647],["Canastota",43.080,-75.747],["Cazenovia",42.930,-75.847],["Chittenango",43.050,-75.867],["DeRuyter",42.760,-75.887],["Eaton",42.860,-75.657],["Fenner",42.960,-75.797],["Georgetown",42.780,-75.747],["Hamilton",42.830,-75.547],["Lebanon",42.800,-75.657],["Lenox",43.090,-75.717],["Lincoln",43.030,-75.617],["Madison",42.900,-75.617],["Nelson",42.920,-75.697],["Smithfield",42.980,-75.807],["Stockbridge",42.920,-75.537],["Sullivan",43.030,-75.767],
+    ["Canastota",43.077,-75.75,"V"],
+    ["Chittenango",43.047,-75.867,"V"],
+    ["Munnsville",42.971,-75.591,"V"],
+    ["Wampsville",43.076,-75.708,"V"]],
+"36055":[["Rochester",43.156,-77.608],["Brighton",43.126,-77.558],["Chili",43.076,-77.748],["Clarkson",43.256,-77.928],["Gates",43.156,-77.708],["Greece",43.226,-77.698],["Hamlin",43.336,-77.928],["Henrietta",43.056,-77.638],["Irondequoit",43.206,-77.558],["Mendon",42.956,-77.588],["Ogden",43.176,-77.808],["Parma",43.316,-77.778],["Penfield",43.156,-77.448],["Perinton",43.096,-77.428],["Pittsford",43.096,-77.508],["Riga",43.076,-77.878],["Rush",42.996,-77.648],["Sweden",43.206,-77.898],["Webster",43.216,-77.428],["Wheatland",42.986,-77.798],
+    ["Churchville",43.101,-77.887,"V"],
+    ["Hilton",43.289,-77.79,"V"],
+    ["Scottsville",42.977,-77.75,"V"]],
+"36057":[["Amsterdam",42.938,-74.188],["Canajoharie",42.908,-74.578],["Florida",42.988,-74.358],["Glen",42.968,-74.338],["Minden",42.928,-74.618],["Palatine",42.948,-74.548],["Root",42.908,-74.428],["St. Johnsville",43.008,-74.688],
+    ["Fort Plain",42.93,-74.622,"V"],
+    ["Fultonville",42.953,-74.399,"V"]],
+"36059":[["Hempstead",40.706,-73.618],["North Hempstead",40.786,-73.678],["Oyster Bay",40.866,-73.528]],
+"36061":[["Manhattan",40.783,-73.971]],
+"36063":[["Niagara Falls",43.096,-79.056],["Lockport",43.170,-78.690],["North Tonawanda",43.036,-78.866],["Cambria",43.176,-78.816],["Hartland",43.326,-78.556],["Lewiston",43.176,-79.036],["Newfane",43.286,-78.706],["Niagara",43.156,-79.036],["Pendleton",43.136,-78.766],["Porter",43.256,-79.076],["Royalton",43.176,-78.536],["Somerset",43.346,-78.636],["Wheatfield",43.096,-78.866],["Wilson",43.306,-78.826],
+    ["Middleport",43.216,-78.479,"V"]],
+"36065":[["Utica",43.100,-75.232],["Rome",43.212,-75.455],["Sherrill",43.070,-75.595],["Boonville",43.480,-75.335],["Camden",43.340,-75.745],["Deerfield",43.130,-75.115],["Floyd",43.290,-75.335],["Forestport",43.460,-75.235],["Kirkland",43.070,-75.395],["Lee",43.290,-75.445],["Marcy",43.160,-75.245],["Marshall",42.990,-75.375],["New Hartford",43.060,-75.295],["Paris",43.010,-75.325],["Remsen",43.330,-75.185],["Sangerfield",42.920,-75.385],["Steuben",43.360,-75.125],["Trenton",43.270,-75.145],["Vernon",43.070,-75.535],["Verona",43.140,-75.565],["Vienna",43.270,-75.605],["Western",43.240,-75.335],["Westmoreland",43.110,-75.405],["Whitestown",43.120,-75.285],
+    ["Camden",43.328,-75.746,"V"],
+    ["Clayville",42.972,-75.254,"V"],
+    ["Clinton",43.048,-75.378,"V"],
+    ["Oneida Castle",43.073,-75.58,"V"]],
+"36067":[["Syracuse",43.048,-76.147],["Baldwinsville",43.158,-76.330],["Camillus",43.038,-76.300],["Cicero",43.178,-76.060],["Clay",43.198,-76.190],["DeWitt",43.058,-76.040],["Elbridge",43.038,-76.440],["Fabius",42.838,-75.970],["Geddes",43.068,-76.210],["Lafayette",42.878,-76.120],["Lysander",43.188,-76.360],["Manlius",43.028,-75.980],["Marcellus",42.988,-76.330],["Onondaga",42.998,-76.190],["Otisco",42.858,-76.270],["Pompey",42.898,-76.020],["Salina",43.118,-76.180],["Skaneateles",42.948,-76.430],["Spafford",42.878,-76.330],["Tully",42.798,-76.120],["Van Buren",43.138,-76.370],
+    ["Baldwinsville",43.158,-76.33,"V"],
+    ["Jordan",43.065,-76.473,"V"],
+    ["Liverpool",43.106,-76.216,"V"],
+    ["Manlius",43.001,-75.982,"V"],
+    ["Marcellus",42.983,-76.341,"V"],
+    ["Minoa",43.072,-76.001,"V"],
+    ["Skaneateles",42.947,-76.43,"V"],
+    ["Solvay",43.06,-76.209,"V"]],
+"36069":[["Canandaigua",42.886,-77.286],["Geneva",42.876,-76.977],["Bristol",42.756,-77.357],["Canadice",42.736,-77.417],["East Bloomfield",42.936,-77.287],["Farmington",43.006,-77.307],["Gorham",42.856,-77.157],["Hopewell",42.956,-77.187],["Manchester",42.976,-77.227],["Naples",42.616,-77.397],["Phelps",42.956,-77.057],["Richmond",42.766,-77.397],["Seneca",42.816,-77.057],["South Bristol",42.696,-77.357],["Victor",43.006,-77.407],["West Bloomfield",42.916,-77.457],
+    ["Shortsville",42.962,-77.222,"V"]],
+"36071":[["Newburgh",41.503,-74.010],["Middletown",41.445,-74.422],["Port Jervis",41.374,-74.692],["Blooming Grove",41.404,-74.202],["Chester",41.364,-74.272],["Cornwall",41.434,-74.032],["Crawford",41.604,-74.272],["Deerpark",41.464,-74.682],["Goshen",41.404,-74.362],["Hamptonburgh",41.434,-74.312],["Highlands",41.374,-73.992],["Minisink",41.314,-74.562],["Monroe",41.324,-74.192],["Montgomery",41.524,-74.232],["Mount Hope",41.434,-74.462],["New Windsor",41.504,-74.062],["Tuxedo",41.204,-74.192],["Warwick",41.254,-74.362],["Woodbury",41.354,-74.062],
+    ["Chester",41.363,-74.271,"V"],
+    ["Cornwall-on-Hudson",41.433,-74.012,"V"],
+    ["Florida",41.331,-74.354,"V"],
+    ["Greenwood Lake",41.224,-74.294,"V"],
+    ["Harriman",41.303,-74.147,"V"],
+    ["Highland Falls",41.369,-73.963,"V"],
+    ["Maybrook",41.491,-74.211,"V"],
+    ["Otisville",41.464,-74.538,"V"],
+    ["South Blooming Grove",41.376,-74.192,"V"],
+    ["Tuxedo Park",41.201,-74.188,"V"],
+    ["Unionville",41.321,-74.549,"V"],
+    ["Warwick",41.256,-74.358,"V"],
+    ["Washingtonville",41.431,-74.168,"V"]],
+"36073":[["Albion",43.246,-78.191],["Holley",43.226,-78.021],["Medina",43.216,-78.381],["Barre",43.196,-78.191],["Carlton",43.356,-78.211],["Clarendon",43.206,-78.051],["Gaines",43.266,-78.231],["Kendall",43.296,-78.061],["Murray",43.306,-78.001],["Ridgeway",43.236,-78.351],["Shelby",43.176,-78.261],["Yates",43.316,-78.131],
+    ["Holley",43.226,-78.022,"V"],
+    ["Lyndonville",43.322,-78.388,"V"]],
+"36075":[["Oswego",43.455,-76.510],["Fulton",43.325,-76.415],["Albion",43.565,-76.025],["Amboy",43.325,-75.865],["Boylston",43.425,-75.965],["Constantia",43.285,-75.975],["Granby",43.285,-76.405],["Hannibal",43.315,-76.555],["Hastings",43.375,-75.855],["Mexico",43.465,-76.225],["Minetto",43.405,-76.465],["New Haven",43.485,-76.315],["Orwell",43.555,-75.975],["Palermo",43.255,-76.305],["Parish",43.415,-75.955],["Redfield",43.585,-75.825],["Richland",43.525,-75.925],["Sandy Creek",43.625,-76.055],["Schroeppel",43.235,-76.275],["Scriba",43.485,-76.275],["Volney",43.325,-76.365],["West Monroe",43.305,-76.065],["Williamstown",43.435,-75.895],
+    ["Central Square",43.282,-76.141,"V"],
+    ["Cleveland",43.241,-75.898,"V"],
+    ["Lacona",43.641,-76.062,"V"]],
+"36077":[["Oneonta",42.450,-75.064],["Cooperstown",42.700,-74.924],["Burlington",42.730,-74.874],["Butternuts",42.470,-75.024],["Cherry Valley",42.790,-74.744],["Decatur",42.590,-74.794],["Edmeston",42.700,-75.254],["Exeter",42.630,-74.894],["Hartwick",42.680,-74.924],["Laurens",42.530,-74.994],["Maryland",42.550,-74.834],["Middlefield",42.720,-74.834],["Milford",42.590,-74.954],["Morris",42.550,-75.254],["New Lisbon",42.600,-75.104],["Otego",42.400,-75.184],["Otsego",42.700,-74.924],["Pittsfield",42.760,-74.824],["Plainfield",42.840,-75.094],["Richfield",42.860,-74.954],["Roseboom",42.720,-74.794],["Schenevus",42.550,-74.824],["Unadilla",42.330,-75.304],["Westford",42.780,-74.724],["Worcester",42.590,-74.704],
+    ["Gilbertsville",42.467,-75.323,"V"]],
+"36079":[["Carmel",41.424,-73.682],["Kent",41.454,-73.762],["Patterson",41.494,-73.582],["Philipstown",41.424,-73.952],["Putnam Valley",41.404,-73.852],["Southeast",41.404,-73.582],
+    ["Brewster",41.396,-73.616,"V"],
+    ["Nelsonville",41.435,-73.953,"V"]],
+"36081":[["Queens",40.728,-73.794]],
+"36083":[["Troy",42.728,-73.691],["Rensselaer city",42.643,-73.741],["Brunswick",42.758,-73.571],["East Greenbush",42.598,-73.691],["Grafton",42.818,-73.461],["Hoosick",42.908,-73.331],["Nassau",42.508,-73.631],["North Greenbush",42.688,-73.661],["Petersburgh",42.778,-73.391],["Pittstown",42.878,-73.511],["Poestenkill",42.698,-73.551],["Sand Lake",42.638,-73.501],["Schaghticoke",42.898,-73.581],["Schodack",42.568,-73.661],["Stephentown",42.658,-73.391],
+    ["Valley Falls",42.898,-73.559,"V"]],
+"36085":[["Staten Island",40.579,-74.151]],
+"36087":[["Clarkstown",41.126,-73.994],["Haverstraw",41.206,-74.024],["Orangetown",41.056,-73.944],["Ramapo",41.136,-74.094],["Stony Point",41.236,-73.984],
+    ["Grand View-on-Hudson",41.095,-73.929,"V"],
+    ["Kaser",41.118,-74.071,"V"],
+    ["New Hempstead",41.134,-74.044,"V"],
+    ["New Square",41.143,-74.023,"V"],
+    ["Pomona",41.175,-74.051,"V"],
+    ["Sloatsburg",41.154,-74.197,"V"],
+    ["Suffern",41.115,-74.15,"V"],
+    ["West Haverstraw",41.21,-73.985,"V"]],
+"36089":[["Ogdensburg",44.694,-75.490],["Massena",44.927,-74.892],["Potsdam",44.669,-74.981],["Canton",44.594,-75.171],["Gouverneur",44.334,-75.461],["Brasher",44.884,-74.751],["Clifton",44.344,-74.831],["Colton",44.404,-74.971],["De Kalb",44.444,-75.241],["De Peyster",44.524,-75.431],["Edwards",44.314,-75.251],["Fine",44.254,-75.121],["Fowler",44.304,-75.451],["Hammond",44.434,-75.681],["Hermon",44.464,-75.221],["Heuvelton",44.624,-75.411],["Lawrence",44.934,-74.701],["Lisbon",44.724,-75.311],["Louisville",44.864,-74.981],["Macomb",44.464,-75.561],["Madrid",44.724,-74.941],["Morristown",44.604,-75.591],["Norfolk",44.824,-74.981],["Oswegatchie",44.694,-75.491],["Pierrepont",44.584,-74.921],["Pitcairn",44.184,-75.201],["Rossie",44.384,-75.651],["Russell",44.364,-74.961],["Stockholm",44.824,-74.781],["Waddington",44.864,-75.191],
+    ["Heuvelton",44.62,-75.407,"V"]],
+"36091":[["Saratoga Springs",43.083,-73.784],["Mechanicville",42.903,-73.684],["Ballston",42.963,-73.864],["Charlton",42.973,-73.934],["Clifton Park",42.873,-73.844],["Corinth",43.243,-73.824],["Day",43.343,-73.924],["Edinburg",43.173,-74.144],["Galway",43.023,-74.024],["Greenfield",43.103,-73.874],["Hadley",43.313,-73.844],["Halfmoon",42.863,-73.764],["Malta",43.023,-73.764],["Milton",43.013,-73.814],["Moreau",43.243,-73.694],["Northumberland",43.083,-73.644],["Providence",43.063,-74.104],["Stillwater",42.943,-73.664],["Wilton",43.133,-73.694],
+    ["Victory",43.092,-73.589,"V"],
+    ["Waterford",42.793,-73.68,"V"]],
+"36093":[["Schenectady",42.814,-73.939],["Scotia",42.827,-73.957],["Duanesburg",42.757,-74.167],["Glenville",42.887,-74.027],["Niskayuna",42.837,-73.867],["Princetown",42.787,-74.117],["Rotterdam",42.787,-73.977]],
+"36095":[["Schoharie",42.668,-74.312],["Cobleskill",42.678,-74.482],["Sharon Springs",42.788,-74.602],["Blenheim",42.458,-74.462],["Broome",42.728,-74.342],["Carlisle",42.758,-74.462],["Conesville",42.398,-74.392],["Esperance",42.768,-74.282],["Fulton",42.548,-74.332],["Gilboa",42.408,-74.432],["Jefferson",42.538,-74.572],["Middleburgh",42.598,-74.332],["Richmondville",42.628,-74.572],["Seward",42.708,-74.632],["Sharon",42.778,-74.622],["Summit",42.558,-74.572],["Wright",42.738,-74.322]],
+"36097":[["Watkins Glen",42.378,-76.871],["Montour Falls",42.348,-76.841],["Burdett",42.418,-76.851],["Catharine",42.298,-76.761],["Dix",42.348,-76.971],["Hector",42.488,-76.821],["Montour",42.348,-76.851],["Orange",42.308,-76.911],["Reading",42.458,-77.011],["Tyrone",42.418,-77.061],
+    ["Burdett",42.415,-76.845,"V"],
+    ["Montour Falls",42.349,-76.841,"V"],
+    ["Odessa",42.337,-76.784,"V"]],
+"36099":[["Waterloo",42.903,-76.864],["Seneca Falls",42.913,-76.794],["Covert",42.663,-76.814],["Fayette",42.813,-76.854],["Junius",43.003,-76.854],["Lodi",42.633,-76.834],["Ovid",42.693,-76.814],["Romulus",42.753,-76.854],["Tyre",43.043,-76.754],["Varick",42.903,-76.804],
+    ["Waterloo",42.903,-76.864,"V"]],
+"36101":[["Corning",42.143,-77.054],["Hornell",42.329,-77.661],["Bath",42.339,-77.321],["Addison",42.099,-77.231],["Avoca",42.409,-77.421],["Cameron",42.239,-77.371],["Campbell",42.259,-77.201],["Canisteo",42.269,-77.601],["Caton",42.089,-77.081],["Cohocton",42.499,-77.501],["Erwin",42.129,-77.051],["Fremont",42.459,-77.361],["Greenwood",42.119,-77.641],["Hornby",42.219,-77.061],["Howard",42.359,-77.521],["Jasper",42.109,-77.491],["Lindley",42.039,-77.161],["Prattsburgh",42.529,-77.371],["Pulteney",42.539,-77.151],["Rathbone",42.189,-77.431],["Thurston",42.249,-77.251],["Troupsburg",42.049,-77.381],["Tuscarora",42.399,-77.401],["Urbana",42.429,-77.141],["Wayland",42.569,-77.591],["West Union",42.069,-77.641],["Wheeler",42.599,-77.431],["Woodhull",42.049,-77.481],
+    ["Arkport",42.391,-77.696,"V"],
+    ["Hammondsport",42.41,-77.22,"V"],
+    ["North Hornell",42.352,-77.657,"V"],
+    ["Riverside",42.147,-77.091,"V"],
+    ["South Corning",42.128,-77.055,"V"],
+    ["Wayland",42.569,-77.59,"V"]],
+"36103":[["Babylon",40.696,-73.324],["Brookhaven",40.946,-72.914],["East Hampton",40.976,-72.184],["Huntington",40.876,-73.424],["Islip",40.716,-73.204],["Riverhead",40.916,-72.654],["Shelter Island",41.066,-72.334],["Smithtown",40.856,-73.194],["Southampton",40.886,-72.384],["Southold",41.066,-72.434]],
+"36105":[["Monticello",41.654,-74.689],["Liberty",41.794,-74.749],["Bethel",41.674,-74.899],["Callicoon",41.744,-75.059],["Cochecton",41.654,-75.039],["Delaware",41.694,-75.089],["Fallsburg",41.724,-74.589],["Forestburgh",41.544,-74.629],["Fremont",41.774,-74.979],["Highland",41.584,-74.639],["Lumberland",41.534,-74.789],["Mamakating",41.594,-74.539],["Neversink",41.844,-74.629],["Rockland",41.804,-74.839],["Thompson",41.664,-74.709],["Tusten",41.614,-75.069]],
+"36107":[["Owego",42.105,-76.263],["Barton",42.065,-76.453],["Berkshire",42.295,-76.173],["Candor",42.225,-76.343],["Newark Valley",42.215,-76.173],["Nichols",42.025,-76.363],["Richford",42.365,-76.203],["Spencer",42.205,-76.503],["Tioga",42.075,-76.273],["Waverly",42.004,-76.522],
+    ["Nichols",42.022,-76.363,"V"]],
+"36109":[["Ithaca",42.444,-76.501],["Ithaca city",42.440,-76.496],["Caroline",42.334,-76.351],["Danby",42.354,-76.471],["Dryden",42.494,-76.291],["Enfield",42.404,-76.591],["Groton",42.584,-76.371],["Lansing",42.534,-76.521],["Newfield",42.354,-76.591],["Ulysses",42.504,-76.581],
+    ["Dryden",42.488,-76.296,"V"],
+    ["Freeville",42.511,-76.343,"V"]],
+"36111":[["Kingston",41.927,-74.000],["Ellenville",41.717,-74.390],["Saugerties",42.077,-73.950],["Denning",41.937,-74.520],["Esopus",41.827,-73.970],["Gardiner",41.687,-74.180],["Hardenburgh",42.027,-74.580],["Hurley",41.967,-74.060],["Lloyd",41.737,-73.970],["Marbletown",41.857,-74.090],["Marlborough",41.627,-73.980],["New Paltz",41.747,-74.090],["Olive",41.987,-74.230],["Plattekill",41.637,-74.080],["Rochester",41.827,-74.250],["Rosendale",41.847,-74.080],["Shandaken",42.097,-74.380],["Shawangunk",41.627,-74.200],["Ulster",41.947,-73.980],["Wawarsing",41.777,-74.380],["Woodstock",42.037,-74.110]],
+"36113":[["Glens Falls",43.309,-73.644],["Lake George",43.429,-73.714],["Bolton",43.549,-73.704],["Chester",43.399,-73.674],["Hague",43.749,-73.524],["Horicon",43.629,-73.774],["Johnsburg",43.669,-74.044],["Lake Luzerne",43.319,-73.834],["Queensbury",43.329,-73.654],["Stony Creek",43.419,-73.944],["Thurman",43.509,-73.884],["Warrensburg",43.489,-73.784],
+    ["Lake George",43.424,-73.713,"V"]],
+"36115":[["Hudson Falls",43.298,-73.586],["Fort Edward",43.268,-73.586],["Argyle",43.238,-73.486],["Cambridge",43.028,-73.376],["Dresden",43.568,-73.616],["Easton",42.998,-73.506],["Fort Ann",43.418,-73.496],["Granville",43.408,-73.256],["Greenwich",43.088,-73.496],["Hampton",43.518,-73.226],["Hartford",43.348,-73.386],["Hebron",43.278,-73.306],["Jackson",43.078,-73.466],["Kingsbury",43.258,-73.546],["Putnam",43.558,-73.416],["Salem",43.178,-73.326],["Whitehall",43.558,-73.406],["White Creek",42.958,-73.396]],
+"36117":[["Newark",43.044,-77.093],["Lyons",43.064,-76.993],["Arcadia",43.044,-77.093],["Butler",43.204,-76.873],["Galen",43.064,-76.883],["Huron",43.244,-76.933],["Macedon",43.074,-77.323],["Marion",43.124,-77.183],["Ontario",43.244,-77.303],["Palmyra",43.064,-77.233],["Rose",43.194,-76.943],["Savannah",43.124,-76.783],["Sodus",43.204,-76.983],["Williamson",43.224,-77.183],["Wolcott",43.224,-76.833]],
+"36119":[["Yonkers",40.931,-73.898],["New Rochelle",40.911,-73.782],["Mount Vernon",40.912,-73.837],["White Plains",41.034,-73.762],["Peekskill",41.294,-73.921],["Bedford",41.224,-73.691],["Cortlandt",41.314,-73.891],["Eastchester",40.954,-73.811],["Greenburgh",41.024,-73.861],["Harrison",40.974,-73.711],["Lewisboro",41.274,-73.591],["Mamaroneck",40.954,-73.741],["Mount Pleasant",41.104,-73.821],["New Castle",41.194,-73.791],["North Castle",41.134,-73.691],["North Salem",41.334,-73.591],["Ossining",41.164,-73.861],["Pelham",40.914,-73.801],["Pound Ridge",41.214,-73.571],["Rye",40.954,-73.691],["Scarsdale",40.994,-73.781],["Somers",41.314,-73.691],["Yorktown",41.274,-73.791],
+    ["Ardsley",41.006,-73.839,"V"],
+    ["Briarcliff Manor",41.143,-73.827,"V"],
+    ["Bronxville",40.939,-73.831,"V"],
+    ["Buchanan",41.261,-73.94,"V"],
+    ["Dobbs Ferry",41.011,-73.877,"V"],
+    ["Elmsford",41.054,-73.82,"V"],
+    ["Irvington",41.038,-73.868,"V"],
+    ["Larchmont",40.928,-73.751,"V"],
+    ["Pelham",40.909,-73.805,"V"],
+    ["Pelham Manor",40.897,-73.801,"V"],
+    ["Pleasantville",41.133,-73.792,"V"],
+    ["Port Chester",40.988,-73.665,"V"],
+    ["Rye Brook",40.969,-73.683,"V"],
+    ["Tuckahoe",40.951,-73.826,"V"]],
+"36121":[["Warsaw",42.740,-78.131],["Attica",42.860,-78.281],["Arcade",42.530,-78.421],["Bennington",42.900,-78.321],["Castile",42.630,-78.031],["Covington",42.820,-78.001],["Eagle",42.740,-78.311],["Gainesville",42.640,-78.141],["Java",42.670,-78.381],["Middlebury",42.800,-78.151],["Orangeville",42.720,-78.221],["Perry",42.710,-78.001],["Pike",42.560,-78.151],["Sheldon",42.740,-78.381],
+    ["Silver Springs",42.661,-78.09,"V"],
+    ["Wyoming",42.832,-78.093,"V"]],
+"36123":[["Penn Yan",42.660,-77.051],["Dundee",42.530,-76.971],["Barrington",42.500,-77.031],["Benton",42.700,-77.051],["Italy",42.580,-77.191],["Jerusalem",42.620,-77.061],["Middlesex",42.590,-77.221],["Milo",42.660,-77.051],["Potter",42.680,-77.251],["Starkey",42.530,-76.971],["Torrey",42.560,-76.951],
+    ["Dresden",42.688,-76.958,"V"]]
+};
+/* ── Confirmed opt-in / opt-out sets ───────────────────────────────── */
+const CONF_IN=new Set(["albany","auburn","beacon","binghamton","buffalo","corning","elmira","fulton","hudson","ithaca","kingston","middletown","mount vernon","new rochelle","newburgh","oneida","oneonta","oswego","plattsburgh","poughkeepsie","rochester","rome","saratoga springs","schenectady","sherrill","syracuse","troy","utica","watertown","white plains","yonkers"]);
+const CONF_OUT={
+"36001":new Set(["T:bethlehem","T:rensselaerville","T:westerlo","V:altamont","V:voorheesville"]),
+"36003":new Set(["T:alma","T:amity","T:andover","T:angelica","T:belfast","T:caneadea","T:clarksville","T:friendship","T:hume","T:independence","T:new hudson","T:rushford","T:willing","V:angelica","V:belmont","V:bolivar","V:wellsville"]),
+"36007":new Set(["T:barker","T:fenton","T:kirkwood","T:nanticoke","T:windsor"]),
+"36009":new Set(["T:ashford","T:carrollton","T:coldspring","T:conewango","T:dayton","T:east otto","T:farmersville","T:franklinville","T:humphrey","T:mansfield","T:perrysburg","T:persia","T:portville","T:south valley","V:delevan","V:gowanda","V:portville","V:south dayton"]),
+"36011":new Set(["T:brutus","T:cato","T:conquest","T:fleming","T:genoa","T:ira","T:ledyard","T:locke","T:mentz","T:niles","T:scipio","T:sennett","T:springport","T:summerhill","T:venice","V:aurora","V:cato","V:fair haven","V:morava","V:port byron","V:union springs","V:weedsport"]),
+"36013":new Set(["T:busti","T:carroll","T:charlotte","T:chautauqua","T:cherry creek","T:clymer","T:ellery","T:ellicott","T:ellington","T:french creek","T:gerry","T:hanover","T:harmony","T:kiantone","T:north harmony","T:poland","T:portland","T:ripley","T:sheridan","T:sherman","T:stockton","T:villenova","V:bemus point","V:brocton","V:cassadaga","V:celoron","V:falconer","V:lakewood","V:mayville","V:panama","V:silver creek","V:sinclairville"]),
+"36015":new Set(["T:baldwin","T:big flats","T:catlin","T:chemung","T:elmira","T:erin","T:southport","T:van etten","T:veteran","V:elmira heights"]),
+"36017":new Set(["T:afton","T:greene","T:guilford","T:new berlin","T:norwich","T:otselic","T:oxford","T:pitcher","T:sherburne","T:smithville","T:smyrna","V:afton","V:greene","V:new berlin","V:sherburne","V:smyrna"]),
+"36019":new Set(["T:chazy","V:rouses point"]),
+"36021":new Set(["T:clermont","T:livingston"]),
+"36023":new Set(["T:cortlandville","T:cuyler","T:lapeer","T:preble","T:virgil","T:willet","V:marathon"]),
+"36025":new Set(["T:andes","T:bovina","T:franklin","T:hamden","T:masonville","T:roxbury","T:stamford","T:walton","V:hobart","V:sidney","V:stamford"]),
+"36027":new Set(["T:amenia","T:beekman","T:dover","T:east fishkill","T:lagrange","T:milan","T:pawling","T:pleasant valley","T:rhinebeck","T:stanford","T:union vale","T:wappinger","T:washington","V:millbrook","V:pawling","V:rhinebeck","V:tivoli"]),
+"36029":new Set(["T:alden","T:aurora","T:brant","T:clarence","T:colden","T:collins","T:elma","T:holland","T:lancaster","T:marilla","T:newstead","T:north collins","T:sardinia","T:wales","V:akron","V:alden","V:gowanda","V:hamburg","V:orchard park","V:williamsville"]),
+"36031":new Set(["T:elizabethtown","T:essex","T:keene","T:lewis","T:newcomb","T:schroon","T:st. armand","T:ticonderoga"]),
+"36033":new Set(["T:constable","T:dickinson","T:duane","T:fort covington","T:franklin","T:santa clara","V:malone"]),
+"36035":new Set(["T:bleecker","T:northampton","V:dolgeville"]),
+"36037":new Set(["T:alabama","T:alexander","T:batavia","T:bergen","T:bethany","T:byron","T:elba","T:leroy","T:oakfield","T:stafford","V:alexander","V:bergen","V:elba","V:leroy","V:oakfield"]),
+"36039":new Set(["T:ashland","T:cairo","T:greenville","T:halcott","T:hunter","T:jewett","T:new baltimore","T:prattsville","T:windham","V:hunter"]),
+"36041":new Set(["T:arietta","T:inlet","T:lake pleasant","T:morehouse","T:wells","V:speculator"]),
+"36043":new Set(["T:german flatts","T:litchfield","T:russia","T:schuyler","V:cold brook","V:dolgeville","V:ilion","V:middleville","V:mohawk"]),
+"36045":new Set(["T:adams","T:alexandria","T:brownville","T:cape vincent","T:champion","T:clayton","T:ellisburg","T:henderson","T:hounsfield","T:leray","T:lyme","T:philadelphia","T:rodman","T:theresa","T:watertown","T:wilna","T:worth","V:adams","V:alexandria bay","V:black river","V:brownville","V:cape vincent","V:chaumont","V:clayton","V:deferiet","V:dexter","V:philadelphia"]),
+"36049":new Set(["T:croghan","T:denmark","T:diana","T:greig","T:harrisburg","T:lewis","T:lowville","T:martinsburg","T:montague","T:new bremen","T:osceola","T:pinckney","T:turin","T:watson","T:west turin","V:castorland","V:constableville","V:copenhagen","V:croghan","V:lowville","V:port leyden","V:turin"]),
+"36051":new Set(["T:conesus","T:geneseo","T:ossian","V:nunda"]),
+"36053":new Set(["C:oneida","T:brookfield","T:cazenovia","T:deruyter","T:fenner","T:georgetown","T:lenox","T:nelson","T:sullivan","V:canastota","V:cazenovia","V:chittenango","V:deruyter","V:munnsville","V:wampsville"]),
+"36055":new Set(["T:chili","T:clarkson","T:gates","T:greece","T:hamlin","T:mendon","T:ogden","T:parma","T:perinton","T:pittsford","T:riga","T:sweden","T:webster","V:churchville","V:hilton","V:pittsford","V:scottsville","V:webster"]),
+"36057":new Set(["T:glen","V:fort plain","V:fultonville"]),
+"36059":new Set(["C:glen cove","C:long beach","T:hempstead","T:north hempstead","T:oyster bay","V:atlantic beach","V:bayville","V:bellerose","V:brookville","V:cedarhurst","V:centre island","V:cove neck","V:east hills","V:east rockaway","V:east williston","V:farmingdale","V:floral park","V:flower hill","V:freeport","V:garden city","V:great neck","V:great neck estates","V:great neck plaza","V:hempstead","V:hewlett bay park","V:hewlett neck","V:island park","V:kensington","V:lattingtown","V:laurel hollow","V:lawrence","V:lynbrook","V:malverne","V:manorhaven","V:massapequa park","V:matinecock","V:mineola","V:munsey park","V:muttontown","V:new hyde park","V:north hills","V:old brookville","V:old westbury","V:plandome heights","V:plandome manor","V:port washington north","V:rockville centre","V:roslyn","V:roslyn estates","V:roslyn harbor","V:russell gardens","V:sands point","V:sea cliff","V:south floral park","V:stewart manor","V:thomaston","V:upper brookville","V:valley stream","V:westbury","V:williston park","V:woodsburgh"]),
+"36063":new Set(["T:cambria","T:hartland","T:pendleton","T:royalton","T:somerset","T:wilson","V:middleport"]),
+"36065":new Set(["C:sherrill","T:boonville","T:bridgewater","T:florence","T:lee","T:vernon","T:westmoreland","V:camden","V:clayville","V:clinton","V:oneida castle"]),
+"36067":new Set(["T:camillus","T:cicero","T:elbridge","T:fabius","T:lafayette","T:otisco","T:pompey","T:tully","V:baldwinsville","V:camillus","V:elbridge","V:fabius","V:jordan","V:liverpool","V:manlius","V:marcellus","V:minoa","V:skaneateles","V:solvay"]),
+"36069":new Set(["T:bristol","T:canandaigua","T:east bloomfield","T:farmington","T:hopewell","T:manchester","T:naples","T:richmond","T:seneca","T:south bristol","T:west bloomfield","V:shortsville"]),
+"36071":new Set(["C:middletown","T:blooming grove","T:chester","T:cornwall","T:crawford","T:deerpark","T:goshen","T:greenville","T:hamptonburgh","T:highlands","T:minisink","T:monroe","T:montgomery","T:mount hope","T:new windsor","V:chester","V:cornwall-on-hudson","V:florida","V:goshen","V:greenwood lake","V:harriman","V:highland falls","V:maybrook","V:monroe","V:montgomery","V:otisville","V:south blooming grove","V:tuxedo park","V:unionville","V:warwick","V:washingtonville"]),
+"36073":new Set(["T:albion","T:barre","T:carlton","T:clarendon","T:gaines","T:murray","T:ridgeway","T:shelby","T:yates","V:holley","V:lyndonville"]),
+"36075":new Set(["T:albion","T:amboy","T:constantia","T:mexico","T:new haven","T:orwell","T:palermo","T:redfield","T:richland","T:volney","T:williamstown","V:central square","V:cleveland","V:lacona","V:mexico"]),
+"36077":new Set(["T:otsego","T:richfield","T:westford","T:worcester","V:gilbertsville"]),
+"36079":new Set(["T:carmel","T:kent","T:patterson","T:philipstown","T:putnam valley","T:southeast","V:brewster","V:nelsonville"]),
+"36083":new Set(["T:berlin","T:sand lake","V:valley falls"]),
+"36087":new Set(["T:clarkstown","T:orangetown","T:ramapo","T:stony point","V:grand view-on-hudson","V:kaser","V:new hempstead","V:new square","V:pomona","V:sloatsburg","V:suffern","V:west haverstraw"]),
+"36089":new Set(["T:brasher","T:dekalb","T:fowler","T:hammond","T:hopkinton","T:madrid","T:norfolk","V:hammond","V:heuvelton"]),
+"36091":new Set(["T:charlton","T:clifton park","T:day","T:edinburg","T:galway","T:malta","T:moreau","T:northumberland","T:providence","T:wilton","V:galway","V:victory","V:waterford"]),
+"36093":new Set(["T:glenville","T:niskayuna","T:princetown"]),
+"36095":new Set(["T:fulton","T:jefferson","T:richmondville","T:sharon","T:summit"]),
+"36097":new Set(["T:cayuta","T:tyrone","V:burdett","V:montour falls","V:odessa"]),
+"36099":new Set(["T:covert","T:fayette","T:ovid","T:varick","V:ovid","V:waterloo"]),
+"36101":new Set(["C:hornell","T:addison","T:avoca","T:bath","T:cameron","T:campbell","T:canisteo","T:caton","T:corning","T:dansville","T:erwin","T:fremont","T:greenwood","T:hartsville","T:hornellsville","T:howard","T:jasper","T:thurston","T:troupsburg","T:tuscarora","T:urbana","T:wayne","T:wheeler","V:addison","V:arkport","V:avoca","V:canisteo","V:hammondsport","V:north hornell","V:riverside","V:south corning","V:wayland"]),
+"36103":new Set(["T:east hampton","T:huntington","T:islip","T:shelter island","T:smithtown","T:southold","V:amityville","V:babylon","V:bellport","V:brightwaters","V:dering harbor","V:east hampton","V:greenport","V:islandia","V:lake grove","V:lindenhurst","V:lloyd harbor","V:nissequogue","V:northport","V:ocean beach","V:patchogue","V:poquott","V:port jefferson","V:quogue","V:sag harbor","V:sagaponack","V:saltaire","V:shoreham","V:southampton","V:the branch","V:westhampton beach"]),
+"36105":new Set(["T:callicoon","T:cochecton","T:fremont","T:lumberland","T:neversink"]),
+"36107":new Set(["T:barton","T:newark valley","T:owego","T:richford","T:spencer","T:tioga","V:nichols","V:spencer"]),
+"36109":new Set(["T:caroline","T:groton","T:lansing","V:dryden","V:freeville","V:groton"]),
+"36111":new Set(["T:esopus","T:plattekill","T:saugerties","T:shawangunk","T:wawarsing"]),
+"36113":new Set(["T:bolton","T:chester","T:horicon","T:lake george","T:stony creek","V:lake george"]),
+"36115":new Set(["T:granville","T:kingsbury"]),
+"36119":new Set(["C:rye","T:bedford","T:eastchester","T:harrison","T:lewisboro","T:mamaroneck","T:mount kisco","T:mount pleasant","T:new castle","T:north castle","T:north salem","T:scarsdale","T:somers","T:yorktown","V:ardsley","V:briarcliff manor","V:bronxville","V:buchanan","V:dobbs ferry","V:elmsford","V:harrison","V:irvington","V:larchmont","V:mamaroneck","V:mount kisco","V:pelham","V:pelham manor","V:pleasantville","V:port chester","V:rye brook","V:scarsdale","V:tuckahoe"]),
+"36121":new Set(["T:attica","T:bennington","T:castile","T:covington","T:gainesville","T:middlebury","T:orangeville","T:perry","T:pike","T:warsaw","T:wethersfield","V:castile","V:gainesville","V:perry","V:silver springs","V:wyoming"]),
+"36123":new Set(["T:benton","T:jerusalem","T:middlesex","T:potter","V:dresden"]),
+};
 
-const C = {bg:'#0b1120',card:'#0f1729',border:'#1a2744',text:'#e8edf5',muted:'#7b8ba5',accent:'#22d3a7',rose:'#f43f7a',amber:'#f5a623',blue:'#3b82f6',violet:'#8b5cf6',cyan:'#06b6d4',emerald:'#10b981',teal:'#14b8a6',orange:'#f97316',pink:'#ec4899'};
-
-// Source-aware tooltip
-function srcTooltip(src) {
-  return { callbacks: {
-    afterBody: function(ctx) { return src ? ['','\ud83d\udcce ' + (typeof src === 'function' ? src(ctx[0].dataIndex) : src)] : []; }
-  }, backgroundColor:'rgba(15,23,41,0.95)', borderColor:C.border, borderWidth:1, titleFont:{weight:'bold',size:12}, bodyFont:{size:11}, padding:12, cornerRadius:8, displayColors:true,
-    bodyColor:C.text, titleColor:C.text };
+function muniOptOut(fips,name,type){
+  const n=name.toLowerCase().trim().replace(/^(town of |city of |village of )/,'');
+  const key=(type||"T")+":"+n;
+  const s=CONF_OUT[fips];
+  return s?s.has(key):false;
 }
+function isConf(){return true;}
 
-// ═══════════════════════════════════════════════════════════
-// TAB NAVIGATION
-// ═══════════════════════════════════════════════════════════
-let chartInstances = {};
-function switchTab(id) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  event.target.classList.add('active');
-  // Lazy init charts
-  setTimeout(() => initCharts(id), 50);
+/* ── Scales ─────────────────────────────────────────────────────────── */
+const GR="#00d990",AM="#f5a623",PK="#e03868";
+const clr=d3.scaleLinear().domain([0,28,50,68,83])
+  .range(["#0d4a2c","#1e6b40","#706020","#8a3222","#6b1218"])
+  .interpolate(d3.interpolateRgb);
+const rO=d3.scaleSqrt().domain([0,80]).range([0,17]);
+const rL=d3.scaleSqrt().domain([0,22]).range([0,13]);
+const rP=d3.scaleSqrt().domain([0,155]).range([0,20]);
+
+let layers={open:true,lic:true,pend:true};
+let drillMode=false;
+let muniG=null;
+let _svg,_g,_bg,_cen,_path,_zoom,_mw,_W,_H,_proj;
+
+/* ── Tooltip ─────────────────────────────────────────────────────────── */
+function posTT(ev){
+  const tt=document.getElementById('tt');
+  const r=_mw.getBoundingClientRect();
+  let x=ev.clientX-r.left+14,y=ev.clientY-r.top-115;
+  if(x+196>_W)x=ev.clientX-r.left-210;
+  if(y<4)y=4;
+  tt.style.left=x+'px';tt.style.top=y+'px';tt.classList.add('vis');
 }
-function switchMicro(id) {
-  document.querySelectorAll('.micro-panel').forEach(el => el.style.display='none');
-  document.querySelectorAll('.micro-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('micro-'+id).style.display='block';
-  event.target.classList.add('active');
-  setTimeout(() => initMicroCharts(id), 50);
-}
+function hideTT(){document.getElementById('tt').classList.remove('vis');}
 
-// ═══════════════════════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════════════════════
-const macroLabels = ['Dec 2023','Nov 2024','Feb 2026','2027P','2028P'];
-const macroSrc = [
-  'OCM 2023 Annual Report, Fig 2 (prelim est., Dec 9 2023)',
-  'OCM 2024 Market Report, Fig 12 (week of 11/3/2024)',
-  'Headset POS Data, Feb 2026 (NY market)',
-  'Demographic-weighted model: GenZ 29% x drifted prefs + Mill 35% + GenX 21% + Boom 11%. Inputs: Headset, BRFSS, BDSA',
-  'Demographic-weighted model: GenZ 33% + Mill 33% + GenX 20% + Boom 10%. GenZ reaches parity with Millennials. Sources: Headset, BRFSS, BDSA, NYU CDUHR'
-];
-
-// Revenue shares (computed from demographic model for 2027P/2028P)
-const macroData = {
-  Flower:    [31, 33, 35.3, 35.8, 33.9],
-  PreRoll:   [15, 12, 19.0, 14.0, 14.7],
-  Vaporizer: [27, 28, 25.0, 27.0, 28.0],
-  Edibles:   [17, 14, 14.5, 12.6, 12.9],
-  Concentrate:[7, 11, 3.1, 3.6, 3.6],
-  Tincture:  [1, 1, 1.0, 1.4, 1.4],
-  Tablets:   [1, 1, 0.6, 0.7, 0.7],
-  Topical:   [0.2, 0.2, 0.5, 0.8, 0.9]
-};
-
-// Unit share conversion
-const avgPrices = [
-  {Flower:52,PreRoll:15,Vaporizer:62,Edibles:22,Concentrate:45,Tincture:48,Tablets:30,Topical:35},
-  {Flower:44,PreRoll:13.55,Vaporizer:58,Edibles:20,Concentrate:40,Tincture:45,Tablets:28,Topical:32},
-  {Flower:39,PreRoll:12,Vaporizer:52,Edibles:18,Concentrate:38,Tincture:42,Tablets:26,Topical:30},
-  {Flower:34,PreRoll:11,Vaporizer:46,Edibles:16,Concentrate:35,Tincture:40,Tablets:24,Topical:28},
-  {Flower:30,PreRoll:10,Vaporizer:42,Edibles:15,Concentrate:32,Tincture:38,Tablets:22,Topical:26}
-];
-const unitSrc = [
-  'Unit conversion: OCM 2023 Annual Report avg prices. Edibles lead in units at ~27%',
-  'Unit conversion: OCM 2024 Market Report, Table 2 & Figs 23/27',
-  'Unit conversion: Headset Feb 2026 + OCM pricing trajectory. Price compression ~12.7% YoY',
-  'Projected units: revenue/projected avg prices (10-15% annual compression)',
-  'Projected units: 2028P prices at mature-market convergence. Sources: OCM, Headset, Cannabis Benchmarks'
-];
-
-function computeUnitShares() {
-  const cats = ['Flower','PreRoll','Vaporizer','Edibles','Concentrate','Tincture'];
-  const result = {};
-  cats.forEach(c => result[c] = []);
-  for (let i = 0; i < 5; i++) {
-    let raw = {}, total = 0;
-    cats.forEach(c => { const u = (macroData[c][i]||0)/(avgPrices[i][c]||1); raw[c]=u; total+=u; });
-    cats.forEach(c => result[c].push(Math.round(raw[c]/total*1000)/10));
-  }
-  return result;
-}
-const unitData = computeUnitShares();
-
-// Gen weight data
-const genWeightLabels = ['2023','2024','2025E','2026P','2027P','2028P'];
-const genWeightSrc = [
-  'Headset 2023 baseline; GenZ ~15% with only 21-26 cohort active',
-  'Headset Sept 2024; GenZ $43.2M/mo, Mill $103.9M, GenX $56.7M, Boom $29.2M (Flowhub/CBT)',
-  'Est: GenZ +11% YoY (Headset); Boomer 65+ +46% 2021-23 (NYU CDUHR) but diluted',
-  'Proj: GenZ 21-29 fully active; 11% CAGR. Millennials plateau. Sources: Headset, Flowhub',
-  'Proj: GenZ overtakes GenX for first time. ~2M Americans turn 21 annually (Census)',
-  'Proj: GenZ reaches parity with Millennials at 33% each. Combined = 66%. Sources: Headset, NYU CDUHR, BDSA, Flowhub'
-];
-const genWeightData = {
-  GenZ: [15, 18.5, 21.5, 24, 29, 33],
-  Millennial: [42, 40, 38.5, 37, 35, 33],
-  GenX: [25, 24.3, 23.5, 23, 21, 20],
-  Boomer: [13, 12.5, 12.2, 12, 11, 10]
-};
-
-// Age prevalence
-const ageLabels = ['2018','2019','2020','2021','2022','2023','2025E','2026P','2027P','2028P'];
-const ageSrc = [
-  'MRTA Report, Fig 19 - BRFSS 2018','MRTA Report, Fig 19 - BRFSS 2019','MRTA Report, Fig 19 - BRFSS 2020',
-  'MRTA Report, Fig 19 - BRFSS 2021 (legalization)','MRTA Report, Fig 19 - BRFSS 2022','OCM 2025 Annual Report, Table 29 - BRFSS 2023',
-  'Projected: 65+ fastest growth (+46% 2021-23, NYU CDUHR); 18-20 declining post-legalization',
-  'Projected: 25-54 bands accelerate with dispensary expansion; 65+ continues outsized growth',
-  'Projected: 21-24 saturation ~35% ceiling; 35-54 steepest gains; suburban opt-in expansion',
-  'Projected: 65+ approaches 10%; CO/WA convergence. Sources: BRFSS, SAMHSA NSDUH, NYU CDUHR'
-];
-const ageData = {
-  '21-24': [19.4,27.8,27.8,29.3,29.3,31.7,33,34,35,35.5],
-  '18-20': [26.8,26.6,27.8,27.8,27.8,24,22,21,20,19],
-  '25-34': [12.7,17.9,18,17.9,17.9,22.3,24,25,26,27],
-  '35-44': [7.1,11.6,12,11.6,11.6,18.7,20,21,22,23],
-  '45-54': [7.4,9.9,10,9.9,9.9,13.2,14.5,15.5,16.5,17.5],
-  '55-64': [3.8,5.2,5.5,5.2,5.2,8,9.5,10.5,11.5,12.5],
-  '65+': [2.5,3,3.2,3.5,4,5.1,6.5,7.5,8.5,9.5]
-};
-
-// Demo prevalence
-const demoLabels = ['2018','2019','2020','2021','2022','2023','2025E','2026P','2027P','2028P'];
-const demoSrc = [
-  'MRTA Report, BRFSS 2018 (extrapolated)','MRTA Report, BRFSS 2019','MRTA Report, BRFSS 2020',
-  'MRTA Report, BRFSS 2021 (legalization)','MRTA Report - BRFSS 2022: Male 19%, Female 11.2%, LGBTQ+ 31.3%',
-  'OCM 2025 Annual Report, Table 29 - BRFSS 2023',
-  'Proj: Female +1pp/yr (Forbes/Monitoring the Future); LGBTQ+ wellness-driven (BDSA/NFD)',
-  'Proj: Gender gap narrowing; LGBTQ+ approaching 40%',
-  'Proj: Female approaches male in under-35 cohorts (NFD); LGBTQ+ stabilizing',
-  'Proj: Gap narrows 5.3pp to ~3.5pp; LGBTQ+ decelerates near saturation'
-];
-const demoData = {
-  'LGBTQ+': [28,29,30,30.5,31.3,35.6,38,39.5,41,42],
-  Male: [15,15.8,16,16.2,19,17.4,18.5,19,19.5,20],
-  Female: [9,9.6,9.8,10,11.2,12.1,13.5,14.5,15.5,16.5],
-  'Het./Cis.': [11,11.5,11.8,12,14,13.2,14,14.5,15,15.5]
-};
-
-// Race
-const raceLabels = ['2018','2020','2022','2023','2025E','2026P','2028P'];
-const raceSrc = [
-  'MRTA Report - BRFSS 2018 est.','MRTA Report - BRFSS 2020','MRTA Report - BRFSS 2022',
-  'OCM 2025 Annual Report, Table 29 - BRFSS 2023',
-  'Proj: Black & White at near-parity; Hispanic growth via bilingual marketing',
-  'Proj: CAURD equity dispensary placement drives adoption in underserved communities',
-  'Proj: Hispanic convergence; Asian growth from low base; Multiracial plateaus ~42%'
-];
-const raceData = {
-  Multiracial: [30,32,35,37.1,39,40,42],
-  Black: [13,14.5,15.5,16.2,17.5,18,19.5],
-  White: [12.5,13.5,15,16.1,17,17.5,18.5],
-  Hispanic: [9,9.5,10.5,11,12.5,13.5,15],
-  Asian: [7,8,9.5,10.2,11.5,12.5,14]
-};
-
-// Prevalence trend
-const prevLabels = ['2018','2019','2020','2021','2022','2023','2025E','2026P','2027P','2028P'];
-const prevSrc = [
-  'OCM 2025 Annual Report, Table 28 - BRFSS 2018','BRFSS 2019','BRFSS 2020',
-  'BRFSS 2021 (MRTA legalization)','BRFSS 2022','BRFSS 2023',
-  'Proj: +0.65pp/yr; 606 stores expanding access','Proj: ~800 stores; suburban expansion',
-  'Proj: Growth decelerates; aligns with CO trajectory','Proj: ~19% ceiling (CO 22.6%, WA 21.3% per NSDUH)'
-];
-const prevData = {current:[11.9,12.7,12.8,12.6,14.9,14.7,16,17,18,19], daily:[5.1,5,6,5.9,7,6.7,7.5,8,8.5,9]};
-
-// Consumption mode
-const modeLabels = ['2018','2019','2020','2021','2022','2024E','2026E','2028P'];
-const modeSrc = [
-  'MRTA Report, Fig 21 - BRFSS 2018','BRFSS 2019','BRFSS 2020','BRFSS 2021','BRFSS 2022',
-  'Est: trajectory extrapolation from BRFSS 2018-2022',
-  'Proj: continued edible/dab growth; smoking decline ~2pp/yr',
-  'Proj: national convergence with mature-market mode mix'
-];
-const modeData = {
-  Smoke:[76.4,74.2,72,71.5,69.8,65,60,55],
-  Eat:[7,6.1,8.5,9.8,12.3,16,19,22],
-  Vaporize:[14.3,15.1,14.8,13,13.6,14,15,16],
-  Dab:[1.6,2,2.3,2.8,3.2,4,5,6]
-};
-
-// Reason
-const reasonLabels = ['2018','2019','2020','2022'];
-const reasonSrc = ['MRTA Report, Fig 20 - BRFSS 2018','BRFSS 2019','BRFSS 2020','BRFSS 2022 (post-legalization)'];
-const reasonData = {NonMed:[51.7,49.1,44.4,52.1],Both:[32.4,33.9,36.3,34.5],MedOnly:[16,17.1,19.2,13.5]};
-
-// Gen spending
-const genSpendLabels = ['Gen Z','Millennial','Gen X','Boomer'];
-const genSpendSrc = [
-  'Headset via GreenState/Flowhub 2026; Gen Z: vape-dominant',
-  'Headset via Flowhub 2025; Millennials = 45% of pre-roll market',
-  'Headset via Flowhub/Crescent Canna; flower-dominant',
-  'Headset via CBT 2026; Boomers: 37.6% flower, 14.4% vape'
-];
-const genSpendData = {Flower:[32.5,40.1,44,50],VapePens:[38,25.7,22,14.4],PreRoll:[13,15,12,8],Edibles:[10,12,14,17],Other:[6.5,7.2,8,10.6]};
-
-// Effects
-const effectLabels = ['Sleep','Relaxation','Energetic','Balance','Clarity','Recovery','Connection','Euphoria'];
-const effectValues = [26,23,21,9,6,6,5,5];
-const effectSubs = ['Sleep 25.7%, Bliss 6.7%, Chill 5.8%, Calm 5.5%','Relax 4.4%, Serenity 0.5%, Zen 0.4%','Energy 14.6%, Awaken 2.2%, Boost 2.1%','Balance 8.9%, Focus 4.0%, Creative 1.2%','Focus, Creative, Flow, Genius','Revive, Restore, Recovery, PMS Relief','Intimacy 4.4%, Social 0.7%','Uplift 3.5%, Fly 0.7%, Exhilaration 0.7%'];
-const effectColors = [C.violet,C.blue,C.amber,C.teal,C.cyan,C.emerald,C.rose,C.pink];
-
-// Micro data
-const microPrerollLabels = ['2023','2024','2025E','2026P','2027P','2028P'];
-const microPrerollSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 17 & 19','Est: infused +3pp/yr (BDSA 44.5% nationally)','Proj: infused approaches parity with singles; BDSA 10% CAGR','Proj: infused overtakes singles (national trend)','Proj: infused #1; aligns with CO/WA. Sources: BDSA, Headset, OCM'];
-const microEdibleLabels = microPrerollLabels;
-const microEdibleSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 22 & 24','Est: bev +88% YoY (Headset); Whitney NY bev TAM $660M','Proj: bev doubles; BDSA +15% nationally','Proj: bev ~20% of edibles; Farm Bill may redirect hemp-THC demand','Proj: bev ~25%; gummies floor ~64%. Sources: BDSA, Whitney, Headset'];
-const microVapeLabels = microPrerollLabels;
-const microVapeSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 25-27','Est: disposable growing (Gen Z); 2g emerging; 0.5g declining','Proj: disposables approach parity; CA vape overtook flower (CBT)','Proj: Gen Z expansion +11%/yr (Headset); regulatory risk on disposables','Proj: disposable dominant; 0.5g floor; 2g doubles. Sources: Headset, CBT, CA DCC'];
-const microConcLabels = microPrerollLabels;
-const microConcSrc = ['OCM 2023 Annual Report est.','OCM 2024 Market Report, Fig 19 & 20','Est: infused PR grows; live rosin gaining as premium','Proj: live rosin doubles; hash contracts','Proj: live rosin = premium counterpoint to infused PR','Proj: infused PR plateau ~64%; live rosin triples. Sources: OCM, BDSA, Headset'];
-const microFlowerLabels = microPrerollLabels;
-const microFlowerSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 14 & Table 2','Est: ounce growing; illicit-to-legal consumers want value','Proj: ounce +4pp; price compression makes bulk accessible','Proj: ounce ~20%; wholesale stabilizing ($1020-1090/lb Cannabis Benchmarks)','Proj: eighth ~52% floor; ounce ~22%. Sources: OCM, Cannabis Benchmarks, Headset, LeafLink'];
-
-// Pie data
-const prerollPieData = [{l:'Singles (non-infused)',v:33,p:'$12',c:C.blue},{l:'5+ Multi-Pack',v:27,p:'$38',c:C.cyan},{l:'Infused Pre-Roll',v:22,p:'$28.27',c:C.rose},{l:'Blunt (non-inf.)',v:8,p:'$15',c:C.teal},{l:'Infused Blunt',v:6,p:'$39.27',c:C.pink},{l:'2-4 Pack',v:4,p:'$25',c:C.muted}];
-const ediblePieData = [{l:'Gummies',v:84,p:'$26.58',c:C.amber},{l:'Bev (Can)',v:7,p:'$4.96',c:C.accent},{l:'Chocolates',v:5,p:'$27.46',c:C.orange},{l:'Bev (Other)',v:2,p:'$9.28',c:C.teal},{l:'Other',v:2,p:'$18',c:C.muted}];
-const vapePieData = [{l:'Cart 1g',v:69,p:'$65.75',c:C.violet},{l:'Cart 0.5g',v:20,p:'$44.15',c:C.pink},{l:'Cart 2g',v:9,p:'$93.47',c:C.blue},{l:'Other',v:2,p:'$50',c:C.muted}];
-const concPieData = [{l:'Infused Pre-Roll',v:58,p:'$28.27',c:C.rose},{l:'Infused Flower',v:11,p:'$79.81',c:C.amber},{l:'Moonrocks',v:7,p:'$53.23',c:C.teal},{l:'Pure Conc.',v:5,p:'$58.62',c:C.cyan},{l:'Live Resin',v:4,p:'$65.32',c:C.blue},{l:'Hash',v:3,p:'$47.91',c:C.emerald},{l:'Live Rosin',v:2,p:'$77.65',c:C.violet},{l:'Other',v:10,p:'$45',c:C.muted}];
-const flowerPieData = [{l:'3.5g (Eighth)',v:63,p:'$44',c:C.blue},{l:'28g (Ounce)',v:14,p:'$196',c:C.cyan},{l:'14g (Half)',v:12,p:'$112',c:C.teal},{l:'7g (Quarter)',v:9,p:'$69',c:C.emerald},{l:'Sub-3.5g',v:1,p:'$25',c:C.muted},{l:'Over 28g',v:1,p:'$250',c:C.violet}];
-
-// ═══════════════════════════════════════════════════════════
-// CHART BUILDERS
-// ═══════════════════════════════════════════════════════════
-function makeLineChart(canvasId, labels, datasets, yMax, srcArr, annotation) {
-  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
-  const ctx = document.getElementById(canvasId);
-  if (!ctx) return;
-  chartInstances[canvasId] = new Chart(ctx, {
-    type:'line',
-    data:{ labels, datasets: datasets.map(d => ({
-      label:d.label, data:d.data, borderColor:d.color, backgroundColor:d.color+'20',
-      borderWidth:d.major?2.5:1.5, borderDash:d.major?[]:[4,2], pointRadius:d.major?4:3,
-      pointBackgroundColor:d.color, pointBorderColor:C.bg, pointBorderWidth:2, tension:0.3, fill:false
-    }))},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      scales:{ y:{ beginAtZero:true, max:yMax, ticks:{callback:v=>v+'%'}, grid:{color:C.border} }, x:{ grid:{color:C.border} }},
-      plugins:{
-        tooltip: srcTooltip(function(i){ return srcArr[i]; }),
-        annotation: annotation ? { annotations: { line1: { type:'line', xMin:annotation, xMax:annotation, borderColor:C.rose, borderDash:[4,4], borderWidth:1,
-          label:{display:true,content:'ACTUAL > PROJ',color:C.rose,font:{size:8,family:'monospace'},position:'start'} }}} : undefined
-      }
-    }
+/* ── Region bars ─────────────────────────────────────────────────────── */
+(function(){
+  const ro={};Object.values(D).forEach(c=>ro[c.region]=(ro[c.region]||0)+c.open);
+  const sorted=Object.entries(ro).sort((a,b)=>b[1]-a[1]);
+  const mx=sorted[0][1];
+  const el=document.getElementById('rbars');
+  sorted.forEach(([r,v])=>{
+    el.innerHTML+=`<div class="rbr"><div class="rbr-lbl"><span>${r}</span><span style="font-family:'Space Mono',monospace">${v}</span></div><div class="rbr-bg"><div class="rbr-fill" style="width:${(v/mx*100).toFixed(0)}%"></div></div></div>`;
   });
-}
+})();
 
-function makeStackedBar(canvasId, labels, datasets, yMax, srcArr) {
-  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
-  const ctx = document.getElementById(canvasId);
-  if (!ctx) return;
-  chartInstances[canvasId] = new Chart(ctx, {
-    type:'bar',
-    data:{ labels, datasets: datasets.map(d => ({ label:d.label, data:d.data, backgroundColor:d.color, borderRadius:2 }))},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      scales:{ y:{ stacked:true, max:yMax, ticks:{callback:v=>v+'%'}, grid:{color:C.border} }, x:{ stacked:true, grid:{color:C.border} }},
-      plugins:{ tooltip: srcTooltip(function(i){ return srcArr[i]; }) }
-    }
-  });
-}
+/* ── Init ────────────────────────────────────────────────────────────── */
+async function init(){
+  const us=await d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json");
+  const nyF=topojson.feature(us,us.objects.counties).features
+    .filter(f=>String(f.id).padStart(5,'0').startsWith('36'));
 
-function makePie(canvasId, legendId, pieData) {
-  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
-  const ctx = document.getElementById(canvasId);
-  if (!ctx) return;
-  chartInstances[canvasId] = new Chart(ctx, {
-    type:'doughnut',
-    data:{ labels:pieData.map(d=>d.l), datasets:[{ data:pieData.map(d=>d.v), backgroundColor:pieData.map(d=>d.c), borderWidth:0 }]},
-    options:{ responsive:false, cutout:'45%',
-      plugins:{ tooltip:{ callbacks:{ label:function(ctx){ const d=pieData[ctx.dataIndex]; return d.l+': '+d.v+'% (avg '+d.p+')'; } },
-        backgroundColor:'rgba(15,23,41,0.95)',borderColor:C.border,borderWidth:1,padding:10,cornerRadius:8,bodyColor:C.text,titleColor:C.text }}
-    }
-  });
-  // Legend
-  const el = document.getElementById(legendId);
-  if(el) el.innerHTML = pieData.map(d => '<div class="pie-legend-row"><span class="pie-swatch" style="background:'+d.c+'"></span><span style="color:'+C.text+';flex:1">'+d.l+'</span><span style="color:'+C.muted+'">'+d.v+'%</span><span style="color:'+C.amber+'">~'+d.p+'</span></div>').join('');
-}
+  const mw=document.getElementById('mw');
+  _mw=mw;_W=mw.clientWidth;_H=mw.clientHeight;
 
-function makeRadar(canvasId) {
-  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
-  const ctx = document.getElementById(canvasId);
-  if (!ctx) return;
-  chartInstances[canvasId] = new Chart(ctx, {
-    type:'radar',
-    data:{ labels:effectLabels, datasets:[{ label:'Share of Effect-Labeled Sales', data:effectValues,
-      borderColor:C.accent, backgroundColor:C.accent+'33', borderWidth:2.5, pointBackgroundColor:C.accent, pointRadius:5, pointBorderColor:C.bg, pointBorderWidth:2 }]},
-    options:{ responsive:false,
-      scales:{ r:{ beginAtZero:true, max:30, ticks:{display:true,color:C.muted,stepSize:10,backdropColor:'transparent'}, grid:{color:C.border}, pointLabels:{color:C.text,font:{size:11,family:'monospace'}} }},
-      plugins:{ tooltip:{ callbacks:{ afterLabel:function(ctx){ return effectSubs[ctx.dataIndex]+' (OCM 2024 Market Report, Fig 33)'; } },
-        backgroundColor:'rgba(15,23,41,0.95)',borderColor:C.border,borderWidth:1,padding:10,cornerRadius:8,bodyColor:C.text,titleColor:C.text }}
-    }
-  });
-  // Effect cards
-  const el = document.getElementById('effectCards');
-  if(el) el.innerHTML = effectLabels.map((e,i) => '<div style="background:rgba(15,23,41,0.5);border:1px solid '+C.border+';border-radius:8px;padding:10px;border-left:3px solid '+effectColors[i]+'"><div style="font-size:12px;font-weight:700;color:'+effectColors[i]+';margin-bottom:2px">'+e+' - '+effectValues[i]+'%</div><div style="font-size:9px;color:'+C.muted+';font-family:monospace;line-height:1.5">'+effectSubs[i]+'</div></div>').join('');
-}
+  const svg=d3.select('#map').attr('width',_W).attr('height',_H);
+  const proj=d3.geoMercator().fitExtent([[22,18],[_W-22,_H-18]],{type:'FeatureCollection',features:nyF});
+  const path=d3.geoPath().projection(proj);
+  _svg=svg;_path=path;_proj=proj;
 
-// ═══════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════
-function initCharts(tab) {
-  if (tab === 'macro') {
-    const cats = ['Flower','PreRoll','Vaporizer','Edibles','Concentrate','Tincture','Tablets','Topical'];
-    const colors = [C.blue,C.rose,C.violet,C.amber,C.cyan,C.emerald,C.pink,C.orange];
-    makeLineChart('macroRevChart', macroLabels, cats.map((c,i)=>({label:c,data:macroData[c],color:colors[i],major:i<5})), 40, macroSrc, 'Feb 2026');
-    const unitCats = ['Edibles','PreRoll','Flower','Vaporizer','Concentrate','Tincture'];
-    const uColors = [C.amber,C.rose,C.blue,C.violet,C.cyan,C.emerald];
-    makeLineChart('macroUnitChart', macroLabels, unitCats.map((c,i)=>({label:c,data:unitData[c],color:uColors[i],major:i<4})), 35, unitSrc, 'Feb 2026');
-    makeLineChart('genWeightChart', genWeightLabels, [
-      {label:'Gen Z',data:genWeightData.GenZ,color:C.violet,major:true},
-      {label:'Millennial',data:genWeightData.Millennial,color:C.blue,major:true},
-      {label:'Gen X',data:genWeightData.GenX,color:C.amber,major:false},
-      {label:'Boomer',data:genWeightData.Boomer,color:C.emerald,major:false}
-    ], 50, genWeightSrc, '2024');
-  }
-  if (tab === 'demo') {
-    const ageDs = Object.entries(ageData).map(([k,v],i) => {
-      const colors = [C.rose,C.amber,C.blue,C.violet,C.cyan,C.emerald,C.accent];
-      return {label:k,data:v,color:colors[i],major:i<4};
+  const zoom=d3.zoom().scaleExtent([1,26])
+    .on('zoom',e=>_g.attr('transform',e.transform));
+  svg.call(zoom);_zoom=zoom;
+
+  const g=svg.append('g');_g=g;
+
+  /* County fills */
+  g.append('g').selectAll('path')
+    .data(nyF).join('path')
+    .attr('class','county-path')
+    .attr('d',path)
+    .attr('fill',f=>{const c=D[String(f.id).padStart(5,'0')];return c?clr(c.optOut):'#101820';})
+    .on('mousemove',function(ev,f){
+      if(drillMode)return;
+      const k=String(f.id).padStart(5,'0'),c=D[k];if(!c)return;
+      document.getElementById('tt-county').style.display='';
+      document.getElementById('tt-muni').style.display='none';
+      document.getElementById('tt-name').textContent=c.name+' County';
+      document.getElementById('tt-oo').textContent=c.optOut+'%';
+      document.getElementById('tt-reg').textContent=c.region;
+      document.getElementById('tt-op').textContent=c.open;
+      document.getElementById('tt-li').textContent=c.lic;
+      document.getElementById('tt-pe').textContent=c.pend;
+      posTT(ev);
+    })
+    .on('mouseleave',hideTT)
+    .on('click',(ev,f)=>{
+      if(drillMode)return;
+      const k=String(f.id).padStart(5,'0');
+      if(D[k])drilldown(k,f);
     });
-    makeLineChart('ageChart', ageLabels, ageDs, 40, ageSrc, '2023');
-    makeLineChart('demoChart', demoLabels, [
-      {label:'LGBTQ+',data:demoData['LGBTQ+'],color:C.rose,major:true},
-      {label:'Male',data:demoData.Male,color:C.blue,major:true},
-      {label:'Female',data:demoData.Female,color:C.pink,major:true},
-      {label:'Het./Cis.',data:demoData['Het./Cis.'],color:C.muted,major:false}
-    ], 50, demoSrc, '2023');
-    makeLineChart('raceChart', raceLabels, [
-      {label:'Multiracial',data:raceData.Multiracial,color:C.rose,major:true},
-      {label:'Black',data:raceData.Black,color:C.blue,major:true},
-      {label:'White',data:raceData.White,color:C.amber,major:true},
-      {label:'Hispanic',data:raceData.Hispanic,color:C.violet,major:false},
-      {label:'Asian',data:raceData.Asian,color:C.cyan,major:false}
-    ], 45, raceSrc, '2023');
-    makeLineChart('prevChart', prevLabels, [
-      {label:'Current (past 30d)',data:prevData.current,color:C.blue,major:true},
-      {label:'Daily/Near-Daily',data:prevData.daily,color:C.rose,major:false}
-    ], 22, prevSrc, '2023');
-  }
-  if (tab === 'gen') {
-    makeStackedBar('genSpendChart', genSpendLabels, [
-      {label:'Flower',data:genSpendData.Flower,color:C.blue},
-      {label:'Vapor Pens',data:genSpendData.VapePens,color:C.violet},
-      {label:'Pre-Roll',data:genSpendData.PreRoll,color:C.rose},
-      {label:'Edibles',data:genSpendData.Edibles,color:C.amber},
-      {label:'Other',data:genSpendData.Other,color:C.muted}
-    ], 100, genSpendSrc);
-  }
-  if (tab === 'mode') {
-    makeLineChart('modeChart', modeLabels, [
-      {label:'Smoke',data:modeData.Smoke,color:C.orange,major:true},
-      {label:'Eat',data:modeData.Eat,color:C.amber,major:true},
-      {label:'Vaporize',data:modeData.Vaporize,color:C.violet,major:false},
-      {label:'Dab',data:modeData.Dab,color:C.cyan,major:false}
-    ], 85, modeSrc, '2022');
-    makeStackedBar('reasonChart', reasonLabels, [
-      {label:'Non-Medical Only',data:reasonData.NonMed,color:C.blue},
-      {label:'Both Med & Non-Med',data:reasonData.Both,color:C.violet},
-      {label:'Medical Only',data:reasonData.MedOnly,color:C.emerald}
-    ], 100, reasonSrc);
-  }
-  if (tab === 'effects') {
-    makeRadar('radarChart');
-  }
+
+  /* County borders */
+  g.append('path')
+    .datum(topojson.mesh(us,us.objects.counties,(a,b)=>{
+      const fa=String(a.id).padStart(5,'0'),fb=String(b.id).padStart(5,'0');
+      return fa.startsWith('36')&&fb.startsWith('36')&&a!==b;
+    }))
+    .attr('fill','none').attr('stroke','#0c1522').attr('stroke-width','0.9').attr('d',path);
+
+  /* State outline */
+  g.append('path')
+    .datum(topojson.merge(us,us.objects.counties.geometries
+      .filter(f=>String(f.id).padStart(5,'0').startsWith('36'))))
+    .attr('fill','none').attr('stroke','#2a3e5c').attr('stroke-width','1.5').attr('d',path);
+
+  /* Centroids + bubbles */
+  const cen={};
+  nyF.forEach(f=>{cen[String(f.id).padStart(5,'0')]=path.centroid(f);});
+  _cen=cen;
+  _bg=g.append('g');
+  drawBubbles();
+
+  /* Toggles */
+  [['t-op','open'],['t-li','lic'],['t-pe','pend']].forEach(([id,k])=>{
+    document.getElementById(id).addEventListener('click',()=>{
+      layers[k]=!layers[k];
+      document.getElementById(id).classList.toggle('on',layers[k]);
+      drawBubbles();
+    });
+  });
+
+  /* Zoom btns */
+  document.getElementById('zi').addEventListener('click',()=>svg.transition().duration(240).call(zoom.scaleBy,1.7));
+  document.getElementById('zo').addEventListener('click',()=>svg.transition().duration(240).call(zoom.scaleBy,0.588));
+  document.getElementById('zr').addEventListener('click',()=>{
+    if(drillMode)backToState();
+    svg.transition().duration(380).call(zoom.transform,d3.zoomIdentity);
+  });
+  document.getElementById('back-btn').addEventListener('click',backToState);
 }
 
-function initMicroCharts(id) {
-  if (id === 'preroll') {
-    makeLineChart('prerollLineChart', microPrerollLabels, [
-      {label:'Singles',data:[40,33,30,27,24,21],color:C.blue,major:true},
-      {label:'5+ Pack',data:[20,27,28,29,29,28],color:C.cyan,major:true},
-      {label:'Infused',data:[15,22,25,27,30,33],color:C.rose,major:true},
-      {label:'Blunt',data:[12,8,7,7,6,5],color:C.teal,major:false},
-      {label:'Infused Blunt',data:[3,6,6,7,8,9],color:C.pink,major:false}
-    ], 45, microPrerollSrc, '2024');
-    makePie('prerollPie','prerollPieLegend',prerollPieData);
-  }
-  if (id === 'edible') {
-    makeLineChart('edibleLineChart', microEdibleLabels, [
-      {label:'Gummies',data:[90,84,79,74,69,64],color:C.amber,major:true},
-      {label:'Bev (Can)',data:[3,7,10,13,16,19],color:C.accent,major:true},
-      {label:'Chocolates',data:[4,5,5,5,5,5],color:C.orange,major:false},
-      {label:'Bev (Other)',data:[1,2,3,4,5,6],color:C.teal,major:false}
-    ], 95, microEdibleSrc, '2024');
-    makePie('ediblePie','ediblePieLegend',ediblePieData);
-  }
-  if (id === 'vape') {
-    makeLineChart('vapeLineChart', microVapeLabels, [
-      {label:'Cart 1g',data:[60,69,67,64,61,58],color:C.violet,major:true},
-      {label:'Disposable',data:[30,37,40,43,45,47],color:C.rose,major:true},
-      {label:'Cart 0.5g',data:[25,20,17,15,13,11],color:C.pink,major:false},
-      {label:'Cart 2g',data:[4,9,12,14,16,18],color:C.blue,major:false}
-    ], 75, microVapeSrc, '2024');
-    makePie('vapePie','vapePieLegend',vapePieData);
-  }
-  if (id === 'conc') {
-    makeLineChart('concLineChart', microConcLabels, [
-      {label:'Infused PR',data:[48,58,60,62,63,64],color:C.rose,major:true},
-      {label:'Infused Flower',data:[14,11,10,9,8,7],color:C.amber,major:true},
-      {label:'Live Rosin',data:[3,2,3,4,5,6],color:C.violet,major:false},
-      {label:'Moonrocks',data:[8,7,7,6,5,5],color:C.teal,major:false},
-      {label:'Hash',data:[5,3,3,2,2,2],color:C.emerald,major:false}
-    ], 70, microConcSrc, '2024');
-    makePie('concPie','concPieLegend',concPieData);
-  }
-  if (id === 'flower') {
-    makeLineChart('flowerLineChart', microFlowerLabels, [
-      {label:'3.5g (Eighth)',data:[68,63,60,57,55,52],color:C.blue,major:true},
-      {label:'28g (Ounce)',data:[10,14,16,18,20,22],color:C.cyan,major:true},
-      {label:'14g (Half)',data:[10,12,12,13,13,13],color:C.teal,major:false},
-      {label:'7g (Quarter)',data:[8,9,9,9,9,10],color:C.emerald,major:false}
-    ], 75, microFlowerSrc, '2024');
-    makePie('flowerPie','flowerPieLegend',flowerPieData);
-  }
+/* ── Draw bubbles ───────────────────────────────────────────────────── */
+function drawBubbles(){
+  _bg.selectAll('*').remove();
+  const ent=Object.entries(D);
+  if(layers.pend)_bg.selectAll('.bp').data(ent.filter(([,d])=>d.pend>0)).join('circle')
+    .attr('cx',([k])=>(_cen[k]||[-9e4,-9e4])[0]).attr('cy',([k])=>(_cen[k]||[-9e4,-9e4])[1])
+    .attr('r',([,d])=>rP(d.pend)).attr('fill',PK).attr('fill-opacity',.08)
+    .attr('stroke',PK).attr('stroke-width',.85).attr('stroke-dasharray','3 2').attr('stroke-opacity',.38)
+    .style('pointer-events','none');
+  if(layers.lic)_bg.selectAll('.bl').data(ent.filter(([,d])=>d.lic>0)).join('circle')
+    .attr('cx',([k])=>(_cen[k]||[-9e4,-9e4])[0]).attr('cy',([k])=>(_cen[k]||[-9e4,-9e4])[1])
+    .attr('r',([,d])=>rL(d.lic)).attr('fill','none').attr('stroke',AM).attr('stroke-width',1.4).attr('stroke-opacity',.82)
+    .style('pointer-events','none');
+  if(layers.open)_bg.selectAll('.bo').data(ent.filter(([,d])=>d.open>0)).join('circle')
+    .attr('cx',([k])=>(_cen[k]||[-9e4,-9e4])[0]).attr('cy',([k])=>(_cen[k]||[-9e4,-9e4])[1])
+    .attr('r',([,d])=>rO(d.open)).attr('fill',GR).attr('fill-opacity',.76)
+    .attr('stroke',GR).attr('stroke-width',.5).attr('stroke-opacity',.5)
+    .style('pointer-events','none');
 }
 
-// Init first tab on load
-window.addEventListener('load', () => {
-  initCharts('macro');
-});
+/* ── Drilldown — Voronoi tessellation, fully offline ───────────────── */
+function drilldown(fips, feature){
+  drillMode=true;
+  const c=D[fips];
+
+  /* Zoom to county */
+  const[[x0,y0],[x1,y1]]=_path.bounds(feature);
+  const pad=0.82;
+  const sc=Math.min(22,pad*_W/(x1-x0),pad*_H/(y1-y0));
+  const tx=_W/2-sc*(x0+x1)/2, ty=_H/2-sc*(y0+y1)/2;
+  _svg.transition().duration(620)
+    .call(_zoom.transform,d3.zoomIdentity.translate(tx,ty).scale(sc));
+
+  /* UI */
+  _bg.style('display','none');
+  document.getElementById('back-btn').classList.add('vis');
+  document.getElementById('hintbox').innerHTML=
+    `${c.name.toUpperCase()} COUNTY · HOVER TOWNS<br>SCROLL TO ZOOM · DRAG TO PAN`;
+  document.getElementById('hdr-sub').textContent=
+    `DRILLDOWN · ${c.name.toUpperCase()} COUNTY · ${c.region.toUpperCase()}`;
+
+  /* Switch panel */
+  document.getElementById('pv-state').style.display='none';
+  document.getElementById('pv-drill').style.display='flex';
+  document.getElementById('drill-region').textContent=c.region;
+  document.getElementById('drill-cname').textContent=c.name;
+  document.getElementById('drill-counts').innerHTML=
+    `<div class="dsb-n" style="color:var(--gr)">${c.open} open <span style="font-size:11px;color:var(--am)">${c.lic} licensed</span></div>
+     <div class="dsb-l">${c.pend} pending apps · ${c.optOut}% county opt-out rate</div>`;
+
+  /* Get towns for this county */
+  const towns=(TOWNS[fips]||[]).map(([name,lat,lon,type="T"])=>{
+    const [px,py]=_proj([lon,lat]);
+    const opted=muniOptOut(fips,name,type);
+    return{name,lat,lon,px,py,opted,conf:true,type};
+  });
+
+  if(towns.length===0){
+    document.getElementById('drill-summary').innerHTML=
+      '<div class="note-t" style="color:var(--mu)">No municipality data available for this county.</div>';
+    document.getElementById('drill-list').innerHTML='';
+    return;
+  }
+
+  /* Build clipPath from county polygon */
+  if(muniG){muniG.remove();muniG=null;}
+  muniG=_g.append('g').attr('class','muni-g');
+
+  const clipId=`cp-${fips}`;
+  const defs=document.getElementById('clip-defs');
+  /* Remove any existing clip for this fips */
+  const old=document.getElementById(clipId);
+  if(old)old.remove();
+  const cp=document.createElementNS('http://www.w3.org/2000/svg','clipPath');
+  cp.setAttribute('id',clipId);
+  const cpPath=document.createElementNS('http://www.w3.org/2000/svg','path');
+  cpPath.setAttribute('d',_path(feature));
+  cp.appendChild(cpPath);
+  defs.appendChild(cp);
+
+  /* Voronoi in projected space */
+  /* Expand bbox slightly so cells at edge are fully clipped */
+  const bx0=x0-4,by0=y0-4,bx1=x1+4,by1=y1+4;
+  const delaunay=d3.Delaunay.from(towns,t=>t.px,t=>t.py);
+  const voronoi=delaunay.voronoi([bx0,by0,bx1,by1]);
+
+  /* Clipped cell group */
+  const cellG=muniG.append('g').attr('clip-path',`url(#${clipId})`);
+
+  cellG.selectAll('.vor-cell')
+    .data(towns).join('path')
+    .attr('class','vor-cell')
+    .attr('d',(d,i)=>voronoi.renderCell(i))
+    .attr('fill',d=>d.opted?'#7a1a1a':'#1a6635')
+    .attr('fill-opacity',0.88)
+    .on('mousemove',function(ev,d){
+      document.getElementById('tt-county').style.display='none';
+      document.getElementById('tt-muni').style.display='';
+      const pfx=d.type==='V'?'Village of ':d.type==='C'?'City of ':'Town of ';
+      document.getElementById('tt-name').textContent=pfx+d.name;
+      const ms=document.getElementById('tt-ms');
+      ms.textContent=d.opted?'OPTED OUT':'OPTED IN';
+      ms.style.color=d.opted?PK:GR;
+      document.getElementById('tt-mc').textContent=D[fips].name+' Co.';
+      document.getElementById('tt-mk').textContent=
+        d.conf?'★ confirmed · OCM / Rockefeller data':'~ estimated from county opt-out rate';
+      posTT(ev);
+    })
+    .on('mouseleave',hideTT);
+
+  /* Panel summary */
+  const inCnt=towns.filter(t=>!t.opted).length;
+  const outCnt=towns.filter(t=>t.opted).length;
+  const total=towns.length||1;
+  document.getElementById('drill-summary').innerHTML=`
+    <div class="ps-t">${total} Municipalities</div>
+    <div style="display:flex;gap:12px;margin-bottom:5px">
+      <div><div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:#2aba6a">${inCnt}</div><div style="font-size:8px;color:var(--mu)">OPTED IN</div></div>
+      <div><div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--pk)">${outCnt}</div><div style="font-size:8px;color:var(--mu)">OPTED OUT</div></div>
+    </div>
+    <div class="muni-bar"><div class="muni-bar-fill" style="width:${(inCnt/total*100).toFixed(0)}%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;color:var(--mu);font-family:'Space Mono',monospace;margin-top:2px">
+      <span style="color:#2aba6a">${(inCnt/total*100).toFixed(0)}% IN</span>
+      <span style="color:var(--pk)">${(outCnt/total*100).toFixed(0)}% OUT</span>
+    </div>`;
+
+  /* List sorted: confirmed first, then opted-in, then alpha */
+  const sorted=[...towns].sort((a,b)=>{
+    if(a.conf!==b.conf)return a.conf?-1:1;
+    if(a.opted!==b.opted)return a.opted?1:-1;
+    return a.name.localeCompare(b.name);
+  });
+  let html='<div class="ps-t" style="margin-top:2px">Municipalities</div>';
+  sorted.forEach(d=>{
+    html+=`<div class="muni-row"><div class="muni-sq" style="background:${d.opted?'#7a1a1a':'#1a6635'}"></div><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.name}</span><span class="conf-b">${d.conf?'★':'~'}</span></div>`;
+  });
+  document.getElementById('drill-list').innerHTML=html;
+}
+
+/* ── Back to state ──────────────────────────────────────────────────── */
+function backToState(){
+  drillMode=false;
+  if(muniG){muniG.remove();muniG=null;}
+  _bg.style('display',null);
+  _svg.transition().duration(500).call(_zoom.transform,d3.zoomIdentity);
+  hideTT();
+  document.getElementById('back-btn').classList.remove('vis');
+  document.getElementById('hintbox').innerHTML='CLICK COUNTY TO DRILL DOWN<br>SCROLL TO ZOOM · DRAG TO PAN';
+  document.getElementById('hdr-sub').textContent='STATE VIEW · COUNTY-LEVEL · OCM + ROCKEFELLER INSTITUTE · MARCH 2026';
+  document.getElementById('pv-drill').style.display='none';
+  document.getElementById('pv-state').style.display='flex';
+}
+
+init().catch(console.error);
 </script>
 </body>
 </html>
