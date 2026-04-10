@@ -62,10 +62,10 @@ canvas{max-width:100%}
 <div class="stats">
 <div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">Non-Flower Share</div><div class="stat-val">55%</div><div class="stat-sub" style="color:var(--rose)">As of Nov 2024 (OCM)</div></div>
 <div class="stat" style="border-top:2px solid var(--rose)"><div class="stat-label">Pre-Roll Surge</div><div class="stat-val">19%</div><div class="stat-sub" style="color:var(--rose)">Feb '26; was 12% mid-'24</div></div>
-<div class="stat" style="border-top:2px solid var(--accent)"><div class="stat-label">Beverage YoY</div><div class="stat-val">+88%</div><div class="stat-sub" style="color:var(--accent)">Fastest-growing category</div></div>
+<div class="stat" style="border-top:2px solid var(--accent)"><div class="stat-label">Beverage YoY</div><div class="stat-val">+32.8%</div><div class="stat-sub" style="color:var(--accent)">Headset Mar 2026; units +72.1%</div></div>
 <div class="stat" style="border-top:2px solid var(--blue)"><div class="stat-label">500+ Brands</div><div class="stat-val">513</div><div class="stat-sub" style="color:var(--blue)">Across 8 major categories</div></div>
 </div>
-<div class="card"><div class="card-title">Revenue Share by Category (Gross Retail $) - Demographic-Weighted Model</div><div class="card-sub">% of total gross retail revenue (shelf price at POS). Actual Dec 2023-Feb 2026 (OCM/Headset). Projected 2027P-2028P via demographic-weighted model. Hover for sources.</div><div class="chart-wrap"><canvas id="macroRevChart" height="380"></canvas></div></div>
+<div class="card"><div class="card-title">Share by Category (Gross Retail $) - Demographic-Weighted Model</div><div class="card-sub">% of total gross retail revenue (shelf price at POS). Actual Dec 2023-Feb 2026 (OCM/Headset). Projected 2027P-2028P via demographic-weighted model. Hover for sources.</div><div class="chart-wrap"><canvas id="macroRevChart" height="380"></canvas></div></div>
 <div class="card"><div class="card-title">Unit Share by Category Using Revenue-to-Unit Conversion</div><div class="card-sub">% of total units sold. Derived from revenue share / avg price per unit per category. Low-price categories gain share vs revenue view. Hover for sources.</div><div class="chart-wrap"><canvas id="macroUnitChart" height="380"></canvas></div></div>
 <div class="card"><div class="note-box">The gap between revenue and unit share reveals which categories punch above or below their weight. Vaporizers command ~25% of revenue but only ~13% of units because avg price ($52-$65) is the highest of any mainstream format. Edibles are the inverse: ~14.5% of revenue but ~21% of units because gummies ($20-$27) and cans ($5) have the lowest per-transaction cost. Pre-rolls are roughly proportional across both measures. Sources: OCM 2023 Annual Report; OCM 2024 Market Report; Headset; OCM 2025 Annual Report; Cannabis Benchmarks</div></div>
 <div class="card"><div class="card-title">Model Input: Generational Share of Total Market Spend</div><div class="card-sub">Each generation's % of total cannabis spend. Gen Z grows from ~15% (2023) to 33% (2028P). Hover for sources.</div><div class="chart-wrap"><canvas id="genWeightChart" height="320"></canvas></div></div>
@@ -154,6 +154,8 @@ canvas{max-width:100%}
 <strong style="color:var(--text)">Primary Sources:</strong> NYS OCM 2025 Annual Report (Dec 2025) - NYS OCM 2024 Market Report (Jun 2025) - OCM 2023 Annual Report - MRTA Implementation Report (2024) - Headset POS Brand Export (Mar 2026) - Headset Market Data via Flowhub/GreenState/Cannabis Business Times (2025-2026) - NYS DOH BRFSS 2018-2023 - BDSA 2025 Cannabis Market Forecasts - Whitney Economics 2026 Cannabis Industry Report - New Frontier Data - MJBizDaily (Mar 2026) - SAMHSA NSDUH - Pew Research - Gallup - CDC YRBS 2021
 <br><br>
 <strong style="color:var(--text)">Methodology:</strong> Actual category share data from OCM reports and Headset POS tracking. Projected values (P) derived from a <strong style="color:var(--accent)">demographic-weighted model</strong>: Category_Share(t) = Sum[GenWeight(gen,t) x (BasePref(gen,cat) + Drift(gen,cat) x years)] across Gen Z, Millennial, Gen X, and Boomer cohorts. Three interacting forces modeled: (1) demographic weight shift (Gen Z 24% to 33% of total spend), (2) intra-cohort preference drift (BRFSS 2018-2023 mode trends, Headset category YoY), (3) compounding interaction effects.
+<br><br>
+<strong style="color:var(--amber)">Taxonomy Note:</strong> OCM classifies beverages as a sub-category of Edibles (OCM 2024 Market Report, Fig 22: gummies 84%, beverages 9%, chocolates 5%). In all charts above, beverage revenue is included within the Edibles line. Headset tracks beverages as a standalone top-level category. The Beverage YoY KPI on the Macro Category Mix tab uses the Headset taxonomy (headset.io/markets/new-york, Mar 2026). Beverage sub-category detail is visible in the Sub-Category Deep Dive tab under Edibles. This distinction matters strategically: beverages represent a distinct consumer behavior (alcohol substitution, social/impulse purchase at ~$5/can) that differs fundamentally from gummies ($27 avg, dose-controlled wellness use).
 </div>
 
 <script>
@@ -372,7 +374,7 @@ const effectColors = [C.violet,C.blue,C.amber,C.teal,C.cyan,C.emerald,C.rose,C.p
 const microPrerollLabels = ['2023','2024','2025E','2026P','2027P','2028P'];
 const microPrerollSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 17 & 19','Est: infused +3pp/yr (BDSA 44.5% nationally)','Proj: infused approaches parity with singles; BDSA 10% CAGR','Proj: infused overtakes singles (national trend)','Proj: infused #1; aligns with CO/WA. Sources: BDSA, Headset, OCM'];
 const microEdibleLabels = microPrerollLabels;
-const microEdibleSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 22 & 24','Est: bev +88% YoY (Headset); Whitney NY bev TAM $660M','Proj: bev doubles; BDSA +15% nationally','Proj: bev ~20% of edibles; Farm Bill may redirect hemp-THC demand','Proj: bev ~25%; gummies floor ~64%. Sources: BDSA, Whitney, Headset'];
+const microEdibleSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 22 & 24','Est: bev +32.8% YoY (Headset Mar 2026); Whitney NY bev TAM $660M','Proj: bev doubles; BDSA +15% nationally','Proj: bev ~20% of edibles; Farm Bill may redirect hemp-THC demand','Proj: bev ~25%; gummies floor ~64%. Sources: BDSA, Whitney, Headset'];
 const microVapeLabels = microPrerollLabels;
 const microVapeSrc = ['OCM 2023 Annual Report','OCM 2024 Market Report, Fig 25-27','Est: disposable growing (Gen Z); 2g emerging; 0.5g declining','Proj: disposables approach parity; CA vape overtook flower (CBT)','Proj: Gen Z expansion +11%/yr (Headset); regulatory risk on disposables','Proj: disposable dominant; 0.5g floor; 2g doubles. Sources: Headset, CBT, CA DCC'];
 const microConcLabels = microPrerollLabels;
@@ -398,13 +400,20 @@ function makeLineChart(canvasId, labels, datasets, yMax, srcArr, annotation) {
     type:'line',
     data:{ labels, datasets: datasets.map(d => ({
       label:d.label, data:d.data, borderColor:d.color, backgroundColor:d.color+'20',
-      borderWidth:d.major?2.5:1.5, borderDash:d.major?[]:[4,2], pointRadius:d.major?4:3,
+      borderWidth:d.major?2.5:2, borderDash:[], pointRadius:d.major?4:3,
       pointBackgroundColor:d.color, pointBorderColor:C.bg, pointBorderWidth:2, tension:0.3, fill:false
     }))},
     options:{
       responsive:true, maintainAspectRatio:false,
       scales:{ y:{ beginAtZero:true, max:yMax, ticks:{callback:v=>v+'%'}, grid:{color:C.border} }, x:{ grid:{color:C.border} }},
       plugins:{
+        legend:{ display:true, position:'bottom', labels:{ color:C.muted, font:{size:10,family:"'Courier New',monospace"}, boxWidth:24, boxHeight:3, padding:12,
+          generateLabels: function(chart) {
+            return chart.data.datasets.map(function(ds, i) {
+              return { text:ds.label, fillStyle:ds.borderColor, strokeStyle:ds.borderColor, fontColor:'#7b8ba5', lineWidth:0, hidden:!chart.isDatasetVisible(i), datasetIndex:i };
+            });
+          }
+        }},
         tooltip: srcTooltip(function(i){ return srcArr[i]; }),
         annotation: annotation ? { annotations: { line1: { type:'line', xMin:annotation, xMax:annotation, borderColor:C.rose, borderDash:[4,4], borderWidth:1,
           label:{display:true,content:'ACTUAL > PROJ',color:C.rose,font:{size:8,family:'monospace'},position:'start'} }}} : undefined
@@ -423,7 +432,9 @@ function makeStackedBar(canvasId, labels, datasets, yMax, srcArr) {
     options:{
       responsive:true, maintainAspectRatio:false,
       scales:{ y:{ stacked:true, max:yMax, ticks:{callback:v=>v+'%'}, grid:{color:C.border} }, x:{ stacked:true, grid:{color:C.border} }},
-      plugins:{ tooltip: srcTooltip(function(i){ return srcArr[i]; }) }
+      plugins:{
+        legend:{ display:true, position:'bottom', labels:{ color:C.muted, font:{size:10,family:"'Courier New',monospace"}, boxWidth:12, boxHeight:12, padding:12 }},
+        tooltip: srcTooltip(function(i){ return srcArr[i]; }) }
     }
   });
 }
@@ -474,7 +485,7 @@ function initCharts(tab) {
     makeLineChart('macroRevChart', macroLabels, cats.map((c,i)=>({label:c,data:macroData[c],color:colors[i],major:i<5})), 40, macroSrc, 'Feb 2026');
     const unitCats = ['Edibles','PreRoll','Flower','Vaporizer','Concentrate','Tincture'];
     const uColors = [C.amber,C.rose,C.blue,C.violet,C.cyan,C.emerald];
-    makeLineChart('macroUnitChart', macroLabels, unitCats.map((c,i)=>({label:c,data:unitData[c],color:uColors[i],major:i<4})), 35, unitSrc, 'Feb 2026');
+    makeLineChart('macroUnitChart', macroLabels, unitCats.map((c,i)=>({label:c,data:unitData[c],color:uColors[i],major:i<4})), 45, unitSrc, 'Feb 2026');
     makeLineChart('genWeightChart', genWeightLabels, [
       {label:'Gen Z',data:genWeightData.GenZ,color:C.violet,major:true},
       {label:'Millennial',data:genWeightData.Millennial,color:C.blue,major:true},
@@ -484,14 +495,14 @@ function initCharts(tab) {
   }
   if (tab === 'demo') {
     const ageDs = Object.entries(ageData).map(([k,v],i) => {
-      const colors = [C.rose,C.amber,C.blue,C.violet,C.cyan,C.emerald,C.accent];
+      const colors = [C.rose,C.amber,C.blue,C.violet,C.cyan,C.orange,C.pink];
       return {label:k,data:v,color:colors[i],major:i<4};
     });
     makeLineChart('ageChart', ageLabels, ageDs, 40, ageSrc, '2023');
     makeLineChart('demoChart', demoLabels, [
       {label:'LGBTQ+',data:demoData['LGBTQ+'],color:C.rose,major:true},
       {label:'Male',data:demoData.Male,color:C.blue,major:true},
-      {label:'Female',data:demoData.Female,color:C.pink,major:true},
+      {label:'Female',data:demoData.Female,color:C.violet,major:true},
       {label:'Het./Cis.',data:demoData['Het./Cis.'],color:C.muted,major:false}
     ], 50, demoSrc, '2023');
     makeLineChart('raceChart', raceLabels, [
@@ -517,7 +528,7 @@ function initCharts(tab) {
   }
   if (tab === 'mode') {
     makeLineChart('modeChart', modeLabels, [
-      {label:'Smoke',data:modeData.Smoke,color:C.orange,major:true},
+      {label:'Smoke',data:modeData.Smoke,color:C.rose,major:true},
       {label:'Eat',data:modeData.Eat,color:C.amber,major:true},
       {label:'Vaporize',data:modeData.Vaporize,color:C.violet,major:false},
       {label:'Dab',data:modeData.Dab,color:C.cyan,major:false}
@@ -537,10 +548,10 @@ function initMicroCharts(id) {
   if (id === 'preroll') {
     makeLineChart('prerollLineChart', microPrerollLabels, [
       {label:'Singles',data:[40,33,30,27,24,21],color:C.blue,major:true},
-      {label:'5+ Pack',data:[20,27,28,29,29,28],color:C.cyan,major:true},
+      {label:'5+ Pack',data:[20,27,28,29,29,28],color:C.amber,major:true},
       {label:'Infused',data:[15,22,25,27,30,33],color:C.rose,major:true},
-      {label:'Blunt',data:[12,8,7,7,6,5],color:C.teal,major:false},
-      {label:'Infused Blunt',data:[3,6,6,7,8,9],color:C.pink,major:false}
+      {label:'Blunt',data:[12,8,7,7,6,5],color:C.orange,major:false},
+      {label:'Infused Blunt',data:[3,6,6,7,8,9],color:C.violet,major:false}
     ], 45, microPrerollSrc, '2024');
     makePie('prerollPie','prerollPieLegend',prerollPieData);
   }
@@ -548,8 +559,8 @@ function initMicroCharts(id) {
     makeLineChart('edibleLineChart', microEdibleLabels, [
       {label:'Gummies',data:[90,84,79,74,69,64],color:C.amber,major:true},
       {label:'Bev (Can)',data:[3,7,10,13,16,19],color:C.accent,major:true},
-      {label:'Chocolates',data:[4,5,5,5,5,5],color:C.orange,major:false},
-      {label:'Bev (Other)',data:[1,2,3,4,5,6],color:C.teal,major:false}
+      {label:'Chocolates',data:[4,5,5,5,5,5],color:C.rose,major:false},
+      {label:'Bev (Other)',data:[1,2,3,4,5,6],color:C.violet,major:false}
     ], 95, microEdibleSrc, '2024');
     makePie('ediblePie','ediblePieLegend',ediblePieData);
   }
@@ -557,7 +568,7 @@ function initMicroCharts(id) {
     makeLineChart('vapeLineChart', microVapeLabels, [
       {label:'Cart 1g',data:[60,69,67,64,61,58],color:C.violet,major:true},
       {label:'Disposable',data:[30,37,40,43,45,47],color:C.rose,major:true},
-      {label:'Cart 0.5g',data:[25,20,17,15,13,11],color:C.pink,major:false},
+      {label:'Cart 0.5g',data:[25,20,17,15,13,11],color:C.amber,major:false},
       {label:'Cart 2g',data:[4,9,12,14,16,18],color:C.blue,major:false}
     ], 75, microVapeSrc, '2024');
     makePie('vapePie','vapePieLegend',vapePieData);
@@ -568,16 +579,16 @@ function initMicroCharts(id) {
       {label:'Infused Flower',data:[14,11,10,9,8,7],color:C.amber,major:true},
       {label:'Live Rosin',data:[3,2,3,4,5,6],color:C.violet,major:false},
       {label:'Moonrocks',data:[8,7,7,6,5,5],color:C.teal,major:false},
-      {label:'Hash',data:[5,3,3,2,2,2],color:C.emerald,major:false}
+      {label:'Hash',data:[5,3,3,2,2,2],color:C.orange,major:false}
     ], 70, microConcSrc, '2024');
     makePie('concPie','concPieLegend',concPieData);
   }
   if (id === 'flower') {
     makeLineChart('flowerLineChart', microFlowerLabels, [
       {label:'3.5g (Eighth)',data:[68,63,60,57,55,52],color:C.blue,major:true},
-      {label:'28g (Ounce)',data:[10,14,16,18,20,22],color:C.cyan,major:true},
-      {label:'14g (Half)',data:[10,12,12,13,13,13],color:C.teal,major:false},
-      {label:'7g (Quarter)',data:[8,9,9,9,9,10],color:C.emerald,major:false}
+      {label:'28g (Ounce)',data:[10,14,16,18,20,22],color:C.amber,major:true},
+      {label:'14g (Half)',data:[10,12,12,13,13,13],color:C.violet,major:false},
+      {label:'7g (Quarter)',data:[8,9,9,9,9,10],color:C.rose,major:false}
     ], 75, microFlowerSrc, '2024');
     makePie('flowerPie','flowerPieLegend',flowerPieData);
   }
